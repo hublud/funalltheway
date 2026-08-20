@@ -1,0 +1,537 @@
+Build Prompt: FunAllTheWay.com
+Build a modern, responsive Nigerian entertainment/blog website for funalltheway.com using:
+Next.js — App Router
+TypeScript
+Tailwind CSS
+Lucide React or another clean icon library
+Component-based architecture
+Responsive design for desktop, tablet, and mobile
+Prepare the architecture for Cloudinary image/media storage, but build the complete UI first. Do not implement the Cloudinary upload functionality yet.
+The website should be inspired by the three provided reference screenshots, but do not copy the original site's branding, exact layout, content, or assets. Use the references only for the overall structure, spacing, navigation concept, advertising placement, and category organization.
+1. Overall Design Direction
+The brand is:
+FUN ALL THE WAY
+The website should feel like a lively Nigerian entertainment and lifestyle blog.
+Main colors
+Use a blue and white theme:
+Primary: strong modern blue
+Secondary: lighter blue
+Background: white / very light gray
+Text: dark navy/charcoal
+Accent: blue variations
+Cards should have subtle borders/shadows.
+Avoid making the entire page heavily blue. White should remain the dominant background color, with blue used for branding, navigation, buttons, links, icons, highlights, and section headings.
+The design should be:
+Clean
+Modern
+Fast-looking
+Entertainment-focused
+Easy to navigate
+Mobile-friendly
+Advertisement-friendly
+Suitable for a Nigerian audience
+2. Reference Screenshot Analysis
+There are three reference screenshots.
+Reference 1 and Reference 2
+The first two screenshots show an existing Nigerian entertainment/news website.
+The important design ideas to take from them are:
+Top Advertisement Banner
+There is a large horizontal advertisement banner positioned near the top of the website.
+Create a reusable component:
+<TopAdBanner />
+It should have a fixed responsive container with an aspect ratio suitable for common advertising banners.
+On desktop:
+Center the banner.
+Give it a reasonable maximum width.
+Leave whitespace around it.
+On mobile:
+Make it responsive.
+Do not allow horizontal overflow.
+For the UI, use a placeholder such as:
+ADVERTISEMENT
+with a subtle gray/blue placeholder background.
+Do NOT use the gambling advertisements from the reference screenshots.
+3. Header / Branding
+Create a professional header for:
+FUN ALL THE WAY
+Use a modern text-based logo initially.
+Example:
+FUN ALL THE WAY
+The logo should have a strong blue visual identity.
+The header should contain:
+Logo
+Main navigation
+Search icon/button
+Mobile hamburger menu
+Desktop header:
+FUN ALL THE WAY
+Home   News   Entertainment   Music   Lifestyle   Sports   More   🔍
+The exact categories can be adjusted to create a polished navigation.
+Make the header sticky or intelligently positioned so navigation remains easy to access.
+4. Featured Icon Navigation
+This is an important part of the reference design.
+The first two screenshots contain a section where important categories are represented using large icons with text underneath.
+For FunAllTheWay, create a similar but more modern section.
+Example:
+       🏠              🎵              🎬              ⚽
+      HOME           MUSIC           VIDEOS          SPORTS
+Possible icon categories:
+Home
+Music
+Videos
+Entertainment
+Sports
+Celebrity
+Lifestyle
+Comedy
+Use clean line icons rather than emoji.
+Each item should contain:
+Icon
+Category name
+Hover animation
+On desktop, display these horizontally.
+On mobile, display them in a responsive grid, approximately:
+[ Home ]       [ Music ]
+[ Videos ]     [ Sports ]
+[ Celebrity ]  [ Lifestyle ]
+This icon navigation should be visually prominent.
+5. Secondary Category Navigation
+The third screenshot is particularly useful for the category structure.
+It shows a WhatsApp-style/list-style collection of categories such as:
+General News
+Fun Edited Pictures
+Fun Edited Videos
+Background and Cloth Change Pictures
+AI Edited Pictures
+Before And After Pictures
+List Of Jobs Available
+Contact Admins For Editing Jobs
+AI Edited Videos
+Celebrity Gist
+Advertise with Us
+Sports News
+For FunAllTheWay, create a secondary category/navigation section beneath the main icon navigation.
+Unlike the first navigation, these categories should be text-based rather than icon-based.
+Use blue text with separators.
+Example:
+GENERAL NEWS | ENTERTAINMENT | CELEBRITY GIST | SPORTS | MUSIC |
+COMEDY | TECHNOLOGY | JOBS | LIFESTYLE | VIRAL STORIES
+On desktop, categories can wrap naturally across multiple lines.
+On mobile, make this section horizontally scrollable or use a compact responsive layout.
+Do not let the categories cause horizontal page overflow.
+6. Search Bar
+The reference screenshots contain a large search area.
+Create a modern search component:
+┌──────────────────────────────────────────────┐
+│ Search articles, news, music, celebrities... │  SEARCH
+└──────────────────────────────────────────────┘
+Use:
+Large input
+Search icon
+Blue search button
+Rounded or slightly rounded corners
+Clean border
+Responsive width
+Desktop:
+Centered
+Maximum width around 900–1100px
+Mobile:
+Full width with the button either beside the input or placed appropriately below it.
+The search UI should be prominent but not overpower the page.
+7. Advertisement Spacing
+Advertising is an important part of the website.
+Design dedicated ad slots throughout the UI.
+Create reusable components:
+<TopAdBanner />
+<HorizontalAd />
+<SidebarAd />
+<InArticleAd />
+<BottomAd />
+For now, they should contain attractive placeholder designs such as:
+ADVERTISEMENT
+728 × 90
+or:
+ADVERTISEMENT
+300 × 250
+Use subtle borders/backgrounds.
+Do not use actual ad network integration yet.
+The layout must already account for future Google AdSense or other advertising networks.
+8. Homepage Layout
+Create a complete homepage.
+Recommended structure:
+TOP AD
+HEADER
+ICON CATEGORY NAVIGATION
+SECONDARY CATEGORY NAVIGATION
+SEARCH BAR
+MAIN CONTENT
+┌─────────────────────────────────────────────┐
+│                                             │
+│          FEATURED STORIES                   │
+│                                             │
+└─────────────────────────────────────────────┘
+┌────────────────────────────┐  ┌────────────┐
+│                            │  │            │
+│     MAIN FEATURED STORY    │  │  SIDEBAR   │
+│                            │  │            │
+└────────────────────────────┘  │   AD       │
+                                │            │
+┌────────────┐ ┌────────────┐  └────────────┘
+│ STORY      │ │ STORY      │
+└────────────┘ └────────────┘
+ADVERTISEMENT
+LATEST NEWS
+ARTICLE GRID
+ADVERTISEMENT
+MORE STORIES
+FOOTER
+9. Featured Stories
+Create a visually attractive featured-news section.
+Use realistic placeholder Nigerian entertainment/blog content.
+Example titles:
+"Top 10 Nigerian Songs Taking Over the Internet This Week"
+"Celebrity Couple Shares Exciting News With Fans"
+"Young Nigerian Creator Goes Viral With New Comedy Series"
+"The Biggest Entertainment Stories Making Headlines Today"
+Do not use copied articles.
+Use placeholder images from a local placeholder source or static placeholder paths for now.
+Structure the data so images can later easily be replaced with Cloudinary URLs.
+Example data structure:
+{
+  id: "1",
+  title: "...",
+  slug: "...",
+  excerpt: "...",
+  image: "...",
+  category: "Entertainment",
+  author: "...",
+  publishedAt: "...",
+  featured: true
+}
+10. Article Cards
+Create reusable article cards.
+Each card should contain:
+Image
+Category badge
+Title
+Short excerpt
+Author
+Date
+Optional reading time
+Example:
+┌──────────────────────────┐
+│                          │
+│        IMAGE             │
+│                          │
+├──────────────────────────┤
+│ ENTERTAINMENT            │
+│                          │
+│ Nigerian Celebrity       │
+│ Makes Major Announcement │
+│                          │
+│ Aug 19, 2026 · 4 min     │
+└──────────────────────────┘
+Add subtle hover effects.
+11. Latest News Section
+Create:
+LATEST NEWS
+with a responsive article grid.
+Desktop:
+3 columns
+Tablet:
+2 columns
+Mobile:
+1 column
+Each card should maintain consistent image dimensions and spacing.
+12. Sidebar
+On desktop, create a right sidebar.
+The sidebar should contain:
+Advertisement
+ADVERTISEMENT
+300 × 250
+Popular Posts
+Example:
+POPULAR STORIES
+Viral Story...
+Celebrity News...
+Latest Music...
+Sports Update...
+Trending Video...
+Newsletter
+Create a small newsletter subscription card:
+STAY UPDATED
+Get the latest stories from Fun All The Way.
+[ Your email address ]
+[ SUBSCRIBE ]
+On mobile, move the sidebar content below the main article content.
+13. Category Pages
+Build reusable category page UI.
+Examples:
+/news
+/entertainment
+/music
+/sports
+/celebrity
+/lifestyle
+/comedy
+/videos
+/jobs
+Each category page should have:
+Page title
+Breadcrumb
+Category description
+Advertisement
+Article grid
+Pagination/load-more UI
+Sidebar on desktop
+Example:
+Home / Entertainment
+ENTERTAINMENT
+The latest entertainment stories, celebrity updates,
+viral stories and happenings.
+ADVERTISEMENT
+[ Article ] [ Article ] [ Article ]
+[ Article ] [ Article ] [ Article ]
+14. Article Details Page
+Build a complete article page UI.
+Example structure:
+ADVERTISEMENT
+Breadcrumb
+CATEGORY
+ARTICLE TITLE
+Short article excerpt
+Author | Date | Reading Time
+FEATURE IMAGE
+Article content
+ADVERTISEMENT
+Article content
+ADVERTISEMENT
+Related Stories
+[ Story ] [ Story ] [ Story ]
+Include:
+Social sharing buttons
+Previous/next article
+Related articles
+Comment section placeholder
+Advertisement slots
+15. Media Architecture / Cloudinary Preparation
+All images and media will eventually be stored using:
+Cloudinary
+Do not implement the Cloudinary upload system yet.
+However, structure the application so Cloudinary can easily be integrated later.
+Create an image abstraction/component such as:
+<BlogImage
+  src={article.image}
+  alt={article.title}
+/>
+Keep image URLs in the article data rather than hardcoding them directly into components.
+Later we should be able to replace:
+/local-image.jpg
+with:
+https://res.cloudinary.com/...
+without redesigning the components.
+Configure the project architecture with future Cloudinary integration in mind.
+16. Responsive Design
+This is very important.
+The website must work properly on:
+Large desktop
+Laptop
+Tablet
+iPad
+Android phones
+iPhone
+Small mobile screens
+Test approximately:
+1920px
+1440px
+1280px
+1024px
+768px
+480px
+375px
+320px
+Avoid:
+Horizontal scrolling
+Broken images
+Overlapping navigation
+Text overflowing containers
+Giant whitespace
+Fixed-width content that breaks mobile
+17. Mobile Header
+On mobile, replace the desktop navigation with:
+FUN ALL THE WAY                 ☰
+When clicked, display a mobile navigation drawer/menu containing:
+Home
+News
+Entertainment
+Music
+Sports
+Celebrity
+Lifestyle
+Comedy
+Videos
+Jobs
+Contact
+Include a search option.
+18. Footer
+Create a large professional footer.
+Sections:
+Fun All The Way
+Short description.
+Quick Links
+Home
+About Us
+Contact
+Advertise
+Privacy Policy
+Terms & Conditions
+Categories
+News
+Entertainment
+Music
+Sports
+Celebrity
+Lifestyle
+Comedy
+Videos
+Social Media
+Create icon buttons for:
+Facebook
+Instagram
+X/Twitter
+TikTok
+YouTube
+WhatsApp
+Bottom:
+© 2026 Fun All The Way. All Rights Reserved.
+19. Design System
+Create reusable Tailwind styles/components for:
+Buttons
+Cards
+Badges
+Navigation
+Headings
+Advertisement slots
+Inputs
+Search
+Pagination
+Breadcrumbs
+Category navigation
+Article metadata
+Use consistent:
+Border radius
+Spacing
+Typography
+Shadows
+Blue color palette
+Do not use excessive rounded cards everywhere. The site should still feel like a professional news/blog publication.
+20. Suggested Component Structure
+Organize the project approximately like:
+app/
+  page.tsx
+  news/
+    page.tsx
+  entertainment/
+    page.tsx
+  music/
+    page.tsx
+  sports/
+    page.tsx
+  celebrity/
+    page.tsx
+  lifestyle/
+    page.tsx
+  videos/
+    page.tsx
+  jobs/
+    page.tsx
+  article/
+    [slug]/
+      page.tsx
+components/
+  layout/
+    Header.tsx
+    Footer.tsx
+    MobileMenu.tsx
+  navigation/
+    IconCategoryNav.tsx
+    SecondaryCategoryNav.tsx
+  blog/
+    ArticleCard.tsx
+    FeaturedArticle.tsx
+    ArticleGrid.tsx
+    PopularPosts.tsx
+    RelatedPosts.tsx
+  ads/
+    TopAdBanner.tsx
+    HorizontalAd.tsx
+    SidebarAd.tsx
+    InArticleAd.tsx
+  search/
+    SearchBar.tsx
+  ui/
+    Button.tsx
+    Badge.tsx
+    Breadcrumb.tsx
+    BlogImage.tsx
+Keep components reusable rather than putting everything inside page.tsx.
+21. Important Development Rule
+BUILD THE FULL UI FIRST.
+Do not spend time implementing:
+Database
+Authentication
+Admin dashboard
+Cloudinary upload
+CMS
+Payment system
+User accounts
+Comments backend
+API backend
+Those will come later.
+For this phase, use realistic mock data so the website looks like a fully populated blog.
+The final result should look like a real production-ready entertainment/news website, not a wireframe.
+22. Visual Quality Requirements
+The final UI should be significantly more modern and polished than the reference websites.
+Use the screenshots for:
+General content density
+Category navigation concept
+Icon-based primary categories
+Text-based secondary categories
+Search placement
+Advertisement spacing
+News-list structure
+But improve the design with:
+Better typography
+Better spacing
+Modern blue/white branding
+Clean article cards
+Responsive grids
+Professional header
+Better mobile navigation
+Modern hover states
+Proper visual hierarchy
+Consistent image aspect ratios
+Better advertisement placeholders
+The site should immediately communicate:
+"This is a professional Nigerian entertainment and lifestyle blog."
+23. Deliverable
+Generate the complete Next.js + Tailwind CSS frontend.
+The homepage must be fully populated with mock articles and media placeholders.
+Create all major reusable components and the main category/article page layouts.
+Ensure:
+npm run dev
+works correctly.
+Use clean TypeScript.
+Do not leave major sections as empty placeholders.
+The website should be ready for the next development phase where we will add:
+Database/CMS
+Admin dashboard
+Cloudinary media management
+Real article publishing
+Authentication
+Search functionality
+Comments
+Advertisement management
+SEO
+Analytics
+For now, focus heavily on making the frontend beautiful, responsive, complete, and production-quality.
