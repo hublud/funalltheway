@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { Loader2 } from "lucide-react";
 
+import { AdminLayoutProvider } from "@/components/admin/AdminLayoutContext";
+
 export default function AdminLayout({
   children,
 }: {
@@ -53,14 +55,16 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-100 text-slate-900">
-      {/* Admin Sidebar Navigation */}
-      <AdminSidebar />
+    <AdminLayoutProvider>
+      <div className="min-h-screen flex flex-col md:flex-row bg-slate-100 text-slate-900">
+        {/* Admin Sidebar (Desktop sidebar + Mobile drawer) */}
+        <AdminSidebar />
 
-      {/* Main Admin Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        {children}
+        {/* Main Admin Content Area */}
+        <div className="flex-1 flex flex-col min-w-0 w-full overflow-y-auto pb-16 md:pb-0">
+          {children}
+        </div>
       </div>
-    </div>
+    </AdminLayoutProvider>
   );
 }

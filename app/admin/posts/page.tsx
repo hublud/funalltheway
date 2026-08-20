@@ -50,16 +50,16 @@ export default function AdminPostsPage() {
         subtitle="Publish, inspect, and delete articles across all categories"
       />
 
-      <div className="p-6 space-y-6 max-w-7xl">
+      <div className="p-3 sm:p-6 space-y-4 sm:space-y-6 max-w-7xl pb-20 md:pb-12">
         {deletedNotification && (
-          <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <div className="p-3.5 sm:p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{deletedNotification}</span>
           </div>
         )}
 
         {/* Search & Filter Bar */}
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
           <div className="relative w-full sm:w-80">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
@@ -71,13 +71,13 @@ export default function AdminPostsPage() {
             />
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              <Filter className="w-4 h-4" />
+          <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 flex-1 sm:flex-initial">
+              <Filter className="w-3.5 h-3.5 shrink-0" />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 text-xs text-slate-800 font-bold focus:outline-none"
+                className="w-full sm:w-auto bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 font-bold focus:outline-none"
               >
                 <option value="all">All Categories</option>
                 {categories.map((c) => (
@@ -88,17 +88,97 @@ export default function AdminPostsPage() {
               </select>
             </div>
 
-            <Link href="/admin/posts/new">
-              <Button variant="primary" size="sm" className="font-bold text-xs uppercase">
-                <Plus className="w-4 h-4 mr-1" />
-                CREATE POST
+            <Link href="/admin/posts/new" className="shrink-0">
+              <Button variant="primary" size="sm" className="font-bold text-xs uppercase px-3 py-1.5">
+                <Plus className="w-3.5 h-3.5 mr-1" />
+                CREATE
               </Button>
             </Link>
           </div>
         </div>
 
-        {/* Posts Table */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        {/* Mobile View: Stacked Cards (Visible on < md) */}
+        <div className="block md:hidden space-y-3">
+          {filteredArticles.length > 0 ? (
+            filteredArticles.map((article) => (
+              <div
+                key={article.id || article.slug}
+                className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3"
+              >
+                <div className="flex gap-3">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-slate-100 border border-slate-200">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                      <span className="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded text-[10px]">
+                        {article.category}
+                      </span>
+                      {article.featured && (
+                        <span className="bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.2 rounded text-[9px] font-black uppercase">
+                          FEATURED
+                        </span>
+                      )}
+                    </div>
+                    <Link
+                      href={`/article/${article.slug}`}
+                      target="_blank"
+                      className="font-bold text-slate-900 hover:text-blue-600 text-xs line-clamp-2 leading-snug"
+                    >
+                      {article.title}
+                    </Link>
+                    <p className="text-[10px] text-slate-400 mt-1">
+                      {article.publishedAt}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-slate-100 gap-2">
+                  <Link
+                    href={`/article/${article.slug}`}
+                    target="_blank"
+                    className="flex-1 py-1.5 text-center rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200"
+                  >
+                    View
+                  </Link>
+                  <Link
+                    href={`/admin/posts/edit/${article.id || article.slug}`}
+                    className="flex-1 py-1.5 text-center rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setDeleteTarget({
+                        id: article.id,
+                        slug: article.slug,
+                        title: article.title,
+                      })
+                    }
+                    className="flex-1 py-1.5 text-center rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 inline-flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="bg-white rounded-2xl p-6 text-center text-slate-500 text-xs border border-slate-200">
+              No posts found matching your filter criteria.
+            </div>
+          )}
+        </div>
+
+        {/* Desktop View: Full Data Table (Visible on >= md) */}
+        <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-slate-700">
               <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-100">

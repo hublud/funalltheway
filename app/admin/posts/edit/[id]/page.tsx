@@ -117,26 +117,26 @@ export default function EditPostPage({ params }: EditPostPageProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col pb-12">
+    <div className="flex-1 flex flex-col pb-20 md:pb-12">
       <AdminHeader
         title="Edit Article"
         subtitle={`Updating "${article?.title || 'Story'}"`}
       />
 
-      <div className="p-6 max-w-5xl space-y-6">
+      <div className="p-3 sm:p-6 max-w-5xl space-y-4 sm:space-y-6">
         <div className="flex items-center justify-between">
           <Link
             href="/admin/posts"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors py-1"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to All Posts</span>
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-5">
-            <h2 className="text-base font-bold text-slate-900 border-b pb-3">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs space-y-4 sm:space-y-5">
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 border-b pb-2 sm:pb-3">
               1. Story Details
             </h2>
 
@@ -157,7 +157,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">
+                <label className="block text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase mb-1">
                   URL Slug
                 </label>
                 <input
@@ -170,7 +170,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             </div>
 
             {/* Category & Read Time Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                   Category *
@@ -217,13 +217,13 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             </div>
 
             {/* Featured toggle */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-1 sm:pt-2">
               <input
                 type="checkbox"
                 id="featuredToggle"
                 checked={featured}
                 onChange={(e) => setFeatured(e.target.checked)}
-                className="w-4 h-4 text-blue-600 rounded"
+                className="w-4 h-4 text-blue-600 rounded shrink-0"
               />
               <label htmlFor="featuredToggle" className="text-xs font-bold text-slate-800 cursor-pointer">
                 Spotlight this story in the Homepage <strong className="text-blue-600">Featured Section</strong>
@@ -232,12 +232,12 @@ export default function EditPostPage({ params }: EditPostPageProps) {
           </div>
 
           {/* Feature Image */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h2 className="text-base font-bold text-slate-900">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
+            <div className="flex items-center justify-between border-b pb-2 sm:pb-3">
+              <h2 className="text-sm sm:text-base font-bold text-slate-900">
                 2. Feature Media
               </h2>
-              <span className="text-xs text-blue-600 font-bold">Cloudinary Storage</span>
+              <span className="text-[11px] sm:text-xs text-blue-600 font-bold">Cloudinary</span>
             </div>
 
             <MediaUploader
@@ -247,8 +247,8 @@ export default function EditPostPage({ params }: EditPostPageProps) {
               onUploadSuccess={(url) => setImageUrl(url)}
             />
 
-            <div>
-              <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">
+            <div className="pt-1">
+              <label className="block text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase mb-1">
                 Image / Video URL:
               </label>
               <input
@@ -261,9 +261,9 @@ export default function EditPostPage({ params }: EditPostPageProps) {
           </div>
 
           {/* Article Body Content */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h2 className="text-base font-bold text-slate-900">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
+            <div className="flex items-center justify-between border-b pb-2 sm:pb-3">
+              <h2 className="text-sm sm:text-base font-bold text-slate-900">
                 3. Story Content Paragraphs
               </h2>
               <Button
@@ -271,7 +271,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                 variant="outline"
                 size="sm"
                 onClick={handleAddParagraph}
-                className="text-xs font-bold"
+                className="text-xs font-bold py-1 px-2.5"
               >
                 <Plus className="w-3.5 h-3.5 mr-1" /> Add Paragraph
               </Button>
@@ -285,7 +285,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                     <button
                       type="button"
                       onClick={() => handleRemoveParagraph(idx)}
-                      className="text-rose-600 hover:text-rose-800 text-[11px] font-bold inline-flex items-center gap-1"
+                      className="text-rose-600 hover:text-rose-800 text-[11px] font-bold inline-flex items-center gap-1 py-0.5 px-1"
                     >
                       <Trash2 className="w-3 h-3" /> Remove
                     </button>
@@ -303,7 +303,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
           </div>
 
           {/* Submit Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4">
+          <div className="flex items-center justify-end gap-3 pt-2 sm:pt-4">
             <Link href="/admin/posts">
               <Button type="button" variant="outline" size="md" className="font-bold text-xs">
                 Cancel
@@ -314,7 +314,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
               variant="primary"
               size="md"
               disabled={isSubmitting}
-              className="font-bold text-xs uppercase tracking-wider px-8 shadow-md"
+              className="font-bold text-xs uppercase tracking-wider px-6 sm:px-8 py-2.5 sm:py-3 shadow-md w-full sm:w-auto"
             >
               <Save className="w-4 h-4 mr-1.5" />
               {isSubmitting ? "Saving Updates..." : "SAVE & UPDATE STORY"}

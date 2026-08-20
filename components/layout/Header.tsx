@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
-                    key={item.href}
+                    key={`${item.href}-${item.label}`}
                     href={item.href}
                     className={`px-3 py-1.5 rounded-md transition-colors ${
                       isActive

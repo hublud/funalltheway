@@ -61,15 +61,15 @@ export default function AdminMediaPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col pb-12">
+    <div className="flex-1 flex flex-col pb-20 md:pb-12">
       <AdminHeader
         title="Cloudinary Media Library"
         subtitle="Upload, optimize, and organize images and videos hosted on Cloudinary CDN"
       />
 
-      <div className="p-6 space-y-6 max-w-7xl">
+      <div className="p-3 sm:p-6 space-y-4 sm:space-y-6 max-w-7xl">
         {/* Upload Box */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-3">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs space-y-3">
           <div className="flex items-center justify-between border-b pb-3">
             <div className="flex items-center gap-2">
               <Cloud className="w-5 h-5 text-blue-600" />

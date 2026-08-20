@@ -58,16 +58,16 @@ export default function AdminAdsPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col pb-12">
+    <div className="flex-1 flex flex-col pb-20 md:pb-12">
       <AdminHeader
         title="Advertisement & Banner Manager"
         subtitle="Customize live banner titles, upload Cloudinary sponsor images, and manage ad slots"
       />
 
-      <div className="p-6 space-y-6 max-w-5xl">
+      <div className="p-3 sm:p-6 space-y-4 sm:space-y-6 max-w-5xl">
         {notification && (
-          <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <div className="p-3.5 sm:p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{notification}</span>
           </div>
         )}

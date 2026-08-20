@@ -183,10 +183,10 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
       {/* Upload Dropzone */}
       <div
         onClick={() => fileInputRef.current?.click()}
-        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center ${
+        className={`border-2 border-dashed rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center ${
           uploading
             ? "border-blue-500 bg-blue-50/60"
-            : "border-slate-300 hover:border-blue-500 hover:bg-blue-50/30"
+            : "border-slate-300 hover:border-blue-500 hover:bg-blue-50/30 active:bg-blue-100/50"
         }`}
       >
         <input
@@ -199,24 +199,24 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
         />
 
         {uploading ? (
-          <div className="py-4 space-y-2 flex flex-col items-center">
-            <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          <div className="py-3 sm:py-4 space-y-2 flex flex-col items-center">
+            <Loader2 className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600 animate-spin" />
             <p className="text-xs font-bold text-blue-700 uppercase tracking-wide">
               Optimizing & Uploading Media...
             </p>
-            <p className="text-[11px] text-slate-400">Processing images for high quality & fast loading</p>
+            <p className="text-[10px] sm:text-[11px] text-slate-400">Processing images for high quality & fast loading</p>
           </div>
         ) : (
-          <div className="py-2 space-y-2">
-            <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
-              <UploadCloud className="w-6 h-6" />
+          <div className="py-1 sm:py-2 space-y-1.5 sm:space-y-2">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
+              <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-800">
-                Click or drag & drop to upload {allowMultiple ? "multiple images / videos" : "an image or video"}
+              <p className="text-xs sm:text-sm font-bold text-slate-800">
+                Tap to upload {allowMultiple ? "photos / video from device" : "an image or video"}
               </p>
-              <p className="text-xs text-slate-400">
-                Supports JPG, PNG, WebP, and MP4. {allowMultiple && "You can select multiple files at once."}
+              <p className="text-[10px] sm:text-xs text-slate-400">
+                Supports JPG, PNG, WebP, and MP4.
               </p>
             </div>
           </div>
@@ -234,23 +234,23 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer"
+              className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer py-1 px-2 rounded-lg bg-blue-50"
             >
-              <Plus className="w-3.5 h-3.5" /> Add More Files
+              <Plus className="w-3.5 h-3.5" /> Add More
             </button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {mediaList.map((item, idx) => {
               const isPrimary = idx === primaryIndex;
               return (
                 <div
                   key={item.id}
-                  className={`group relative rounded-xl overflow-hidden border-2 transition-all bg-slate-900 shadow-xs ${
+                  className={`group relative rounded-xl overflow-hidden border-2 transition-all bg-slate-900 shadow-xs flex flex-col ${
                     isPrimary ? "border-blue-600 ring-2 ring-blue-400/30" : "border-slate-200"
                   }`}
                 >
-                  <div className="aspect-video relative overflow-hidden">
+                  <div className="aspect-video relative overflow-hidden bg-slate-950">
                     {item.type === "video" || item.url.endsWith(".mp4") ? (
                       <video src={item.url} className="w-full h-full object-cover" />
                     ) : (
@@ -269,14 +269,13 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                       </span>
                     )}
 
-                    {/* Action Overlay */}
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    {/* Desktop Hover Overlay */}
+                    <div className="hidden md:flex absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity items-center justify-center gap-2">
                       {!isPrimary && (
                         <button
                           type="button"
                           onClick={() => handleSetPrimary(idx)}
-                          className="bg-blue-600 hover:bg-blue-700 text-white p-1.5 rounded-md text-[11px] font-bold shadow-xs cursor-pointer"
-                          title="Set as Main Cover"
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-md text-[11px] font-bold shadow-xs cursor-pointer"
                         >
                           Make Cover
                         </button>
@@ -304,9 +303,48 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                     </div>
                   </div>
 
-                  <div className="p-2 bg-white flex items-center justify-between text-[11px]">
+                  <div className="p-2 bg-white flex items-center justify-between text-[11px] border-b border-slate-100">
                     <span className="truncate text-slate-700 font-medium max-w-[120px]">{item.name}</span>
                     <span className="uppercase text-[9px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{item.type}</span>
+                  </div>
+
+                  {/* Mobile Touch Action Bar */}
+                  <div className="flex md:hidden items-center justify-between p-1.5 bg-slate-50 gap-1">
+                    {!isPrimary ? (
+                      <button
+                        type="button"
+                        onClick={() => handleSetPrimary(idx)}
+                        className="flex-1 bg-blue-600 text-white py-1 px-1.5 rounded text-[10px] font-bold text-center"
+                      >
+                        Set Cover
+                      </button>
+                    ) : (
+                      <span className="flex-1 text-[10px] font-bold text-blue-600 text-center py-1">
+                        Active Cover
+                      </span>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(item.id, item.url)}
+                      className="p-1.5 bg-slate-200 text-slate-700 rounded text-xs"
+                      title="Copy URL"
+                    >
+                      {copiedId === item.id ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(idx)}
+                      className="p-1.5 bg-rose-100 text-rose-700 rounded text-xs"
+                      title="Remove"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               );

@@ -7,19 +7,19 @@ export interface NavCategory {
 
 export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
   { name: "Home", slug: "/", icon: "Home", label: "Home" },
+  { name: "Edited Picture", slug: "/services", icon: "ImageIcon", label: "Edited Picture" },
+  { name: "Edited Video", slug: "/services", icon: "Video", label: "Edited Video" },
   { name: "Music", slug: "/music", icon: "Music", label: "Music" },
   { name: "Videos", slug: "/videos", icon: "PlaySquare", label: "Videos" },
   { name: "Entertainment", slug: "/entertainment", icon: "Sparkles", label: "Entertainment" },
-  { name: "Sports", slug: "/sports", icon: "Trophy", label: "Sports" },
   { name: "Celebrity", slug: "/celebrity", icon: "Flame", label: "Celebrity" },
-  { name: "Lifestyle", slug: "/lifestyle", icon: "Compass", label: "Lifestyle" },
   { name: "Comedy", slug: "/comedy", icon: "Laugh", label: "Comedy" },
 ];
 
 export const SECONDARY_CATEGORIES = [
-  { name: "AI EDITED PICTURES", slug: "/news?filter=ai-pictures" },
-  { name: "AI EDITED VIDEOS", slug: "/videos?filter=ai-videos" },
-  { name: "BEFORE & AFTER PICTURES", slug: "/entertainment?filter=before-after" },
+  { name: "EDITED PICTURES", slug: "/services" },
+  { name: "EDITED VIDEOS", slug: "/services" },
+  { name: "BEFORE & AFTER PICTURES", slug: "/services" },
   { name: "FREEBEATS & INSTRUMENTALS", slug: "/music?filter=freebeats" },
   { name: "NOLLYWOOD EXCLUSIVES", slug: "/celebrity" },
   { name: "VIRAL SKITS", slug: "/comedy" },

@@ -28,6 +28,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "⭐ Our Services & Edits", href: "/services" },
+    { label: "📸 Edited Pictures", href: "/services" },
+    { label: "🎬 Edited Videos", href: "/services" },
     { label: "News", href: "/news" },
     { label: "Entertainment", href: "/entertainment" },
     { label: "Music", href: "/music" },
@@ -86,7 +88,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
         <div className="flex-1 overflow-y-auto p-4 space-y-1">
           {navLinks.map((link) => (
             <Link
-              key={link.href}
+              key={`${link.href}-${link.label}`}
               href={link.href}
               onClick={onClose}
               className="flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-bold text-slate-800 hover:bg-blue-50 hover:text-blue-600 transition-colors"

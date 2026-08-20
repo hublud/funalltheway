@@ -55,23 +55,23 @@ export default function AdminCategoriesPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col pb-20 md:pb-12">
       <AdminHeader
         title="Category Manager"
         subtitle="Create, organize, and delete content categories"
       />
 
-      <div className="p-6 space-y-6 max-w-7xl">
+      <div className="p-3 sm:p-6 space-y-4 sm:space-y-6 max-w-7xl">
         {notification && (
-          <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <div className="p-3.5 sm:p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{notification}</span>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
           {/* Add Category Form */}
-          <div className="lg:col-span-4 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
+          <div className="lg:col-span-4 bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs space-y-4">
             <div className="flex items-center gap-2 border-b pb-3">
               <FolderTree className="w-5 h-5 text-blue-600" />
               <h2 className="text-base font-bold text-slate-900">Add New Category</h2>

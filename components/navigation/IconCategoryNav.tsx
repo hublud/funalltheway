@@ -12,6 +12,10 @@ import {
   Flame,
   Compass,
   Smile,
+  ImageIcon,
+  Video,
+  Wand2,
+  Camera,
 } from "lucide-react";
 import { PRIMARY_ICON_CATEGORIES } from "@/data/categories";
 
@@ -24,6 +28,12 @@ const iconMap: Record<string, React.ElementType> = {
   Flame: Flame,
   Compass: Compass,
   Laugh: Smile,
+  Smile: Smile,
+  ImageIcon: ImageIcon,
+  Image: ImageIcon,
+  Video: Video,
+  Wand2: Wand2,
+  Camera: Camera,
 };
 
 export const IconCategoryNav: React.FC = () => {
