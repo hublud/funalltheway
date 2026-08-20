@@ -28,8 +28,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
   const navLinks = [
     { label: "Home", href: "/" },
     { label: "⭐ Our Services & Edits", href: "/services" },
-    { label: "📸 Edited Pictures", href: "/services" },
-    { label: "🎬 Edited Videos", href: "/services" },
+    { label: "📸 Edited Pictures", href: "/edited-pictures" },
+    { label: "🎬 Edited Videos", href: "/edited-videos" },
     { label: "News", href: "/news" },
     { label: "Entertainment", href: "/entertainment" },
     { label: "Music", href: "/music" },

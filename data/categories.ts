@@ -7,8 +7,8 @@ export interface NavCategory {
 
 export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
   { name: "Home", slug: "/", icon: "Home", label: "Home" },
-  { name: "Edited Picture", slug: "/services", icon: "ImageIcon", label: "Edited Picture" },
-  { name: "Edited Video", slug: "/services", icon: "Video", label: "Edited Video" },
+  { name: "Edited Pictures", slug: "/edited-pictures", icon: "ImageIcon", label: "Edited Picture" },
+  { name: "Edited Videos", slug: "/edited-videos", icon: "Video", label: "Edited Video" },
   { name: "Music", slug: "/music", icon: "Music", label: "Music" },
   { name: "Videos", slug: "/videos", icon: "PlaySquare", label: "Videos" },
   { name: "Entertainment", slug: "/entertainment", icon: "Sparkles", label: "Entertainment" },
@@ -17,8 +17,8 @@ export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
 ];
 
 export const SECONDARY_CATEGORIES = [
-  { name: "EDITED PICTURES", slug: "/services" },
-  { name: "EDITED VIDEOS", slug: "/services" },
+  { name: "EDITED PICTURES", slug: "/edited-pictures" },
+  { name: "EDITED VIDEOS", slug: "/edited-videos" },
   { name: "BEFORE & AFTER PICTURES", slug: "/services" },
   { name: "FREEBEATS & INSTRUMENTALS", slug: "/music?filter=freebeats" },
   { name: "NOLLYWOOD EXCLUSIVES", slug: "/celebrity" },
@@ -29,6 +29,18 @@ export const SECONDARY_CATEGORIES = [
 ];
 
 export const ALL_CATEGORIES = [
+  {
+    name: "Edited Pictures",
+    slug: "edited-pictures",
+    title: "Edited Pictures & Visual Retouching",
+    description: "Discover studio photo manipulations, skin retouching, background swaps, celebrity transformations, and high-definition photo editing services.",
+  },
+  {
+    name: "Edited Videos",
+    slug: "edited-videos",
+    title: "Edited Videos, Shorts & Visuals",
+    description: "Explore cinematic video edits, viral comedy clips, sound syncs, music visualizers, transitions, and high-impact digital video productions.",
+  },
   {
     name: "News",
     slug: "news",

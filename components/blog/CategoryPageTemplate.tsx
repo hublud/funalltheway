@@ -22,11 +22,20 @@ export const CategoryPageTemplate: React.FC<CategoryPageTemplateProps> = ({
 }) => {
   const { articles: storeArticles, isLoaded } = useStore();
 
-  const activeArticles =
-    storeArticles.filter(
-      (a) => a.category.toLowerCase() === categoryName.toLowerCase() ||
-             a.categorySlug.toLowerCase() === categoryName.toLowerCase()
+  const normCat = categoryName.toLowerCase().trim();
+  const normSlug = normCat.replace(/\s+/g, "-");
+  const normStem = normCat.replace(/s$/, "");
+
+  const activeArticles = storeArticles.filter((a) => {
+    const artCat = a.category.toLowerCase().trim();
+    const artSlug = a.categorySlug.toLowerCase().trim();
+    return (
+      artCat === normCat ||
+      artSlug === normSlug ||
+      artCat.replace(/s$/, "") === normStem ||
+      artSlug.replace(/s$/, "") === normStem.replace(/\s+/g, "-")
     );
+  });
 
   const displayArticles = activeArticles.length > 0 ? activeArticles : (articles || storeArticles);
 

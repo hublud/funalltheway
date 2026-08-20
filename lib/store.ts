@@ -56,7 +56,12 @@ const INITIAL_CATEGORIES: Category[] = ALL_CATEGORIES.map((c) => ({
   name: c.name,
   slug: c.slug,
   description: c.description,
-  isPrimaryIcon: PRIMARY_ICON_CATEGORIES.some((p) => p.name.toLowerCase() === c.name.toLowerCase()),
+  isPrimaryIcon: PRIMARY_ICON_CATEGORIES.some(
+    (p) =>
+      p.name.toLowerCase() === c.name.toLowerCase() ||
+      p.slug.toLowerCase() === `/${c.slug.toLowerCase()}` ||
+      p.label.toLowerCase() === c.name.toLowerCase()
+  ),
 }));
 
 class DataStore {
@@ -86,7 +91,14 @@ class DataStore {
       }
 
       const storedCategories = localStorage.getItem(CATEGORIES_STORAGE_KEY);
-      this.categories = storedCategories ? JSON.parse(storedCategories) : INITIAL_CATEGORIES;
+      if (storedCategories) {
+        const parsed = JSON.parse(storedCategories);
+        const existingSlugs = new Set(parsed.map((cat: any) => cat.slug));
+        const missing = INITIAL_CATEGORIES.filter((c) => !existingSlugs.has(c.slug));
+        this.categories = [...parsed, ...missing];
+      } else {
+        this.categories = INITIAL_CATEGORIES;
+      }
 
       const storedAds = localStorage.getItem(ADS_STORAGE_KEY);
       this.ads = storedAds ? JSON.parse(storedAds) : DEFAULT_ADS;
