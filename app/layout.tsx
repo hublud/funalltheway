@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { TopAdBanner } from "@/components/ads/TopAdBanner";
 import { Header } from "@/components/layout/Header";
@@ -79,14 +78,11 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Google tag (gtag.js) */}
-        <Script
+        <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-YY5HR8RQKB"
-          strategy="afterInteractive"
         />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
+        <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
