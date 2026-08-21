@@ -231,13 +231,13 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             </div>
           </div>
 
-          {/* Feature Image */}
+          {/* Feature Media */}
           <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-xs space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between border-b pb-2 sm:pb-3">
               <h2 className="text-sm sm:text-base font-bold text-slate-900">
-                2. Feature Media
+                2. Feature Media (Photos / Video)
               </h2>
-              <span className="text-[11px] sm:text-xs text-blue-600 font-bold">Cloudinary</span>
+              <span className="text-[11px] sm:text-xs text-blue-600 font-bold">Videos & Images</span>
             </div>
 
             <MediaUploader
