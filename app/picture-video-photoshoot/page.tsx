@@ -4,10 +4,10 @@ import { CategoryPageTemplate } from "@/components/blog/CategoryPageTemplate";
 
 export const metadata: Metadata = {
   title: "Picture and Video Photoshoot | Fun All The Way Limited",
-  description: "Professional photoshoot and video shoot sessions by Fun All The Way Limited.",
+  description: "Professional studio and outdoor photoshoot sessions, video shoots, event coverage, model lookbooks, and picture shoots.",
 };
 
-export default function PictureVideoPhotoshopPage() {
+export default function PictureVideoPhotoshootPage() {
   return (
     <CategoryPageTemplate
       title="Picture & Video Photoshoot Sessions"

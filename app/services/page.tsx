@@ -85,12 +85,12 @@ export default function ServicesPage() {
     },
     {
       num: "07",
-      title: "Picture & Video Photoshop",
-      desc: "Flawless composite edits, watermark removals, flyer mockups, and high-precision visual corrections.",
-      icon: Layers,
-      badge: "Expert",
+      title: "Picture & Video Photoshoot",
+      desc: "Professional studio and outdoor photoshoot sessions, video shoots, event coverage, model lookbooks, and high-resolution picture sessions.",
+      icon: Camera,
+      badge: "Signature",
       color: "from-indigo-600 to-blue-700",
-      waText: "Hello Fun All The Way Limited, I want to order Photoshop Retouching services.",
+      waText: "Hello Fun All The Way Limited, I want to book a Picture & Video Photoshoot session.",
     },
     {
       num: "08",

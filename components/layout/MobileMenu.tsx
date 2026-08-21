@@ -32,7 +32,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
     { label: "🎬 Edited Videos", href: "/edited-videos" },
     { label: "🤖 AI Editing", href: "/ai-editing" },
     { label: "🔄 Before & After Pictures", href: "/before-after-pictures" },
-    { label: "🪄 Picture & Video Photoshop", href: "/picture-video-photoshop" },
+    { label: "📷 Picture & Video Photoshoot", href: "/picture-video-photoshoot" },
     { label: "🎨 Graphic Design", href: "/graphic-design" },
     { label: "⚽ Sport News", href: "/sports" },
     { label: "🎧 Mixtape", href: "/mixtapes" },

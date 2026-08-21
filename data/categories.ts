@@ -11,7 +11,7 @@ export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
   { name: "Edited Videos", slug: "/edited-videos", icon: "Video", label: "Edited Video" },
   { name: "Ai Editing", slug: "/ai-editing", icon: "Bot", label: "Ai Editing" },
   { name: "Before & After Pictures", slug: "/before-after-pictures", icon: "SlidersHorizontal", label: "Before & After" },
-  { name: "Picture and Video Photoshop", slug: "/picture-video-photoshop", icon: "Layers", label: "Photoshop" },
+  { name: "Picture and Video Photoshoot", slug: "/picture-video-photoshoot", icon: "Camera", label: "Photoshoot" },
   { name: "Graphic Design", slug: "/graphic-design", icon: "Palette", label: "Graphic Design" },
   { name: "Sport News", slug: "/sports", icon: "Trophy", label: "Sport News" },
   { name: "Mixtape", slug: "/mixtapes", icon: "Disc3", label: "Mixtape" },
@@ -23,7 +23,7 @@ export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
 export const SECONDARY_CATEGORIES = [
   { name: "AI EDITING", slug: "/ai-editing" },
   { name: "BEFORE & AFTER PICTURES", slug: "/before-after-pictures" },
-  { name: "PICTURE & VIDEO PHOTOSHOP", slug: "/picture-video-photoshop" },
+  { name: "PICTURE & VIDEO PHOTOSHOOT", slug: "/picture-video-photoshoot" },
   { name: "GRAPHIC DESIGN", slug: "/graphic-design" },
   { name: "SPORT NEWS", slug: "/sports" },
   { name: "MIXTAPES", slug: "/mixtapes" },
@@ -51,10 +51,10 @@ export const ALL_CATEGORIES = [
     description: "Witness striking visual transformations, high-end studio skin retouching, background replacements, and before-and-after photo editing showcases.",
   },
   {
-    name: "Picture and Video Photoshop",
-    slug: "picture-video-photoshop",
-    title: "Picture & Video Photoshop Editing",
-    description: "Flawless composite edits, watermark removals, flyer mockups, video grading, and high-precision visual Photoshop retouching.",
+    name: "Picture and Video Photoshoot",
+    slug: "picture-video-photoshoot",
+    title: "Picture & Video Photoshoot Sessions",
+    description: "Professional studio and outdoor photoshoot sessions, video shoots, event coverage, model lookbooks, and high-resolution picture transformations.",
   },
   {
     name: "Graphic Design",
