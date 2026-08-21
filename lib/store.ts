@@ -122,26 +122,67 @@ class DataStore {
         .order("created_at", { ascending: false });
 
       if (!artErr && dbArticles && dbArticles.length > 0) {
-        this.articles = dbArticles.map((row: any) => ({
-          id: row.id,
-          title: row.title,
-          slug: row.slug,
-          excerpt: row.excerpt,
-          content: row.content || [],
-          image: row.image,
-          category: row.category_name || row.category || "News",
-          categorySlug: row.category_slug || "news",
-          location: row.location || "Lagos",
-          author: {
-            name: row.author_name || "Editor",
-            avatar: row.author_avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-            role: row.author_role || "Contributing Editor",
-          },
-          publishedAt: row.published_at ? new Date(row.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recent",
-          readTime: row.read_time || "3 min read",
-          views: row.views || 0,
-          featured: Boolean(row.featured),
-        }));
+        this.articles = dbArticles.map((row: any) => {
+          const rawTags: string[] = row.tags || [];
+          const mediaTagEntries = rawTags.filter((t: string) => t.startsWith("MEDIA:"));
+          const userTags = rawTags.filter((t: string) => !t.startsWith("MEDIA:"));
+
+          const isMainVideo =
+            row.image?.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
+            row.image?.includes("/videos/");
+
+          const mediaList: { url: string; type: "image" | "video" }[] = [];
+          if (row.image) {
+            mediaList.push({
+              url: row.image,
+              type: isMainVideo ? "video" : "image",
+            });
+          }
+
+          mediaTagEntries.forEach((t: string) => {
+            const mediaUrl = t.replace("MEDIA:", "");
+            if (mediaUrl && !mediaList.some((m) => m.url === mediaUrl)) {
+              const isVid =
+                mediaUrl.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
+                mediaUrl.includes("/videos/");
+              mediaList.push({
+                url: mediaUrl,
+                type: isVid ? "video" : "image",
+              });
+            }
+          });
+
+          return {
+            id: row.id,
+            title: row.title,
+            slug: row.slug,
+            excerpt: row.excerpt,
+            content: row.content || [],
+            image: row.image,
+            category: row.category_name || row.category || "News",
+            categorySlug: row.category_slug || "news",
+            location: row.location || "Lagos",
+            author: {
+              name: row.author_name || "Editor",
+              avatar:
+                row.author_avatar ||
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+              role: row.author_role || "Contributing Editor",
+            },
+            publishedAt: row.published_at
+              ? new Date(row.published_at).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "Recent",
+            readTime: row.read_time || "3 min read",
+            views: row.views || 0,
+            featured: Boolean(row.featured),
+            tags: userTags,
+            mediaList: mediaList.length > 0 ? mediaList : undefined,
+          };
+        });
         this.saveLocally();
       }
 
@@ -255,6 +296,16 @@ class DataStore {
     this.saveLocally();
     this.notify();
 
+    const allTags: string[] = [...(newArticle.tags || [])];
+    if (newArticle.mediaList && newArticle.mediaList.length > 0) {
+      newArticle.mediaList.forEach((m) => {
+        if (m.url && m.url !== newArticle.image) {
+          const entry = `MEDIA:${m.url}`;
+          if (!allTags.includes(entry)) allTags.push(entry);
+        }
+      });
+    }
+
     try {
       await this.supabase.from("articles").insert({
         title: newArticle.title,
@@ -270,6 +321,7 @@ class DataStore {
         author_role: newArticle.author.role,
         read_time: newArticle.readTime,
         featured: newArticle.featured,
+        tags: allTags,
       });
     } catch (e) {
       console.error("Supabase insert error:", e);
@@ -286,6 +338,17 @@ class DataStore {
     this.saveLocally();
     this.notify();
 
+    const currentArticle = this.articles[idx];
+    const allTags: string[] = [...(currentArticle.tags || [])];
+    if (currentArticle.mediaList && currentArticle.mediaList.length > 0) {
+      currentArticle.mediaList.forEach((m) => {
+        if (m.url && m.url !== currentArticle.image) {
+          const entry = `MEDIA:${m.url}`;
+          if (!allTags.includes(entry)) allTags.push(entry);
+        }
+      });
+    }
+
     try {
       await this.supabase
         .from("articles")
@@ -300,6 +363,7 @@ class DataStore {
           location: updates.location,
           read_time: updates.readTime,
           featured: updates.featured,
+          tags: allTags,
           updated_at: new Date().toISOString(),
         })
         .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`);

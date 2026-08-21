@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 
 interface BlogImageProps {
   src: string;
@@ -12,11 +11,6 @@ interface BlogImageProps {
   aspectRatio?: "video" | "square" | "portrait" | "wide";
 }
 
-/**
- * BlogImage abstraction component.
- * Prepared for future Cloudinary integration.
- * If src starts with "cloudinary:" or is a standard URL, it formats appropriately.
- */
 export const BlogImage: React.FC<BlogImageProps> = ({
   src,
   alt,
@@ -27,7 +21,9 @@ export const BlogImage: React.FC<BlogImageProps> = ({
 }) => {
   const [hasError, setHasError] = useState(false);
 
-  // Cloudinary prefix builder placeholder for future integration
+  const isVideo =
+    src?.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) || src?.includes("/videos/");
+
   const getOptimizedSrc = (rawSrc: string) => {
     if (!rawSrc) return "/images/placeholder.jpg";
     if (rawSrc.startsWith("cloudinary://")) {
@@ -37,7 +33,9 @@ export const BlogImage: React.FC<BlogImageProps> = ({
     return rawSrc;
   };
 
-  const imageSrc = hasError ? "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80" : getOptimizedSrc(src);
+  const imageSrc = hasError
+    ? "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80"
+    : getOptimizedSrc(src);
 
   const aspectClasses = {
     video: "aspect-[16/9]",
@@ -47,15 +45,30 @@ export const BlogImage: React.FC<BlogImageProps> = ({
   }[aspectRatio];
 
   return (
-    <div className={`relative overflow-hidden bg-slate-100 ${!fill ? aspectClasses : "w-full h-full"} ${className}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={imageSrc}
-        alt={alt || "Fun All The Way Article Image"}
-        loading={priority ? "eager" : "lazy"}
-        onError={() => setHasError(true)}
-        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-      />
+    <div
+      className={`relative overflow-hidden bg-slate-950 ${
+        !fill ? aspectClasses : "w-full h-full"
+      } ${className}`}
+    >
+      {isVideo ? (
+        <video
+          src={src}
+          muted
+          autoPlay
+          loop
+          playsInline
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      ) : (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src={imageSrc}
+          alt={alt || "Fun All The Way Media"}
+          loading={priority ? "eager" : "lazy"}
+          onError={() => setHasError(true)}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      )}
     </div>
   );
 };

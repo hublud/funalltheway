@@ -22,6 +22,7 @@ export default function CreatePostPage() {
   const [readTime, setReadTime] = useState("3 min read");
   const [featured, setFeatured] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [mediaList, setMediaList] = useState<{ url: string; type: "image" | "video" }[]>([]);
   const [paragraphs, setParagraphs] = useState<string[]>([""]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -53,8 +54,9 @@ export default function CreatePostPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !imageUrl) {
-      alert("Please provide an article title and upload a feature image.");
+    const primaryMedia = imageUrl || (mediaList[0] ? mediaList[0].url : "");
+    if (!title.trim() || !primaryMedia) {
+      alert("Please provide an article title and upload at least one photo or video.");
       return;
     }
 
@@ -63,12 +65,18 @@ export default function CreatePostPage() {
     const selectedCatObj = categories.find((c) => c.slug === categorySlug);
     const catName = selectedCatObj ? selectedCatObj.name : "News";
 
+    const allMediaItems = mediaList.length > 0 ? mediaList : [{
+      url: primaryMedia,
+      type: primaryMedia.match(/\.(mp4|webm|mov|mkv|avi)$/i) || primaryMedia.includes("/videos/") ? ("video" as const) : ("image" as const)
+    }];
+
     await addArticle({
       title: title.trim(),
       slug: slug.trim() || `story-${Date.now()}`,
       excerpt: excerpt.trim() || (paragraphs[0] ? paragraphs[0].slice(0, 120) : ""),
       content: paragraphs.filter((p) => p.trim().length > 0),
-      image: imageUrl,
+      image: primaryMedia,
+      mediaList: allMediaItems,
       category: catName,
       categorySlug: categorySlug,
       author: {
@@ -209,10 +217,26 @@ export default function CreatePostPage() {
             </div>
 
             <MediaUploader
-              folder="funalltheway/posts"
+              folder="posts"
               initialUrl={imageUrl}
               allowMultiple={true}
-              onUploadSuccess={(url) => setImageUrl(url)}
+              onUploadSuccess={(url, type, allUrls) => {
+                setImageUrl(url);
+                if (allUrls && allUrls.length > 0) {
+                  setMediaList(
+                    allUrls.map((u) => ({
+                      url: u,
+                      type:
+                        u.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
+                        u.includes("/videos/")
+                          ? "video"
+                          : "image",
+                    }))
+                  );
+                } else if (url) {
+                  setMediaList([{ url, type }]);
+                }
+              }}
             />
 
             {/* Direct URL input fallback */}

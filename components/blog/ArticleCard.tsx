@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Play, Film, Images } from "lucide-react";
 import { Article } from "@/types";
 import { BlogImage } from "../ui/BlogImage";
 
@@ -14,11 +14,18 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   article,
   className = "",
 }) => {
+  const isVideo =
+    article.image?.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) ||
+    article.image?.includes("/videos/") ||
+    article.mediaList?.some((m) => m.type === "video");
+
+  const hasMultipleMedia = article.mediaList && article.mediaList.length > 1;
+
   return (
     <article
       className={`group relative overflow-hidden rounded-3xl border-2 sm:border-[3px] border-white/90 bg-slate-900 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 aspect-[3/4] sm:aspect-[4/5] flex flex-col justify-end ${className}`}
     >
-      {/* Full-bleed background image */}
+      {/* Full-bleed background media */}
       <Link
         href={`/article/${article.slug}`}
         className="absolute inset-0 w-full h-full block overflow-hidden"
@@ -33,11 +40,23 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 via-45% to-transparent transition-opacity group-hover:via-black/55" />
       </Link>
 
-      {/* Top category pill badge */}
-      <div className="absolute top-3 left-3 z-10 pointer-events-none">
+      {/* Top badges */}
+      <div className="absolute top-3 left-3 z-10 pointer-events-none flex items-center gap-1.5">
         <span className="bg-black/40 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-xs">
           {article.category}
         </span>
+
+        {isVideo && (
+          <span className="bg-indigo-600/80 backdrop-blur-md border border-indigo-400/30 text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+            <Play className="w-2.5 h-2.5 fill-current" /> Video
+          </span>
+        )}
+
+        {hasMultipleMedia && !isVideo && (
+          <span className="bg-blue-600/80 backdrop-blur-md border border-blue-400/30 text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+            <Images className="w-2.5 h-2.5" /> +{article.mediaList!.length}
+          </span>
+        )}
       </div>
 
       {/* Top right quick-link icon */}
@@ -58,12 +77,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         </Link>
 
         {/* Action / Read button */}
-        <div className="flex items-center justify-end mt-2 pt-1.5 border-t border-white/15">
+        <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-white/15">
+          <span className="text-[10px] text-slate-300 font-medium truncate max-w-[120px]">
+            {article.author?.name || "Editor"}
+          </span>
+
           <Link
             href={`/article/${article.slug}`}
             className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-white/15 hover:bg-blue-600 text-white px-2.5 py-0.5 rounded-full border border-white/25 transition-colors shrink-0 flex items-center gap-1"
           >
-            <span>READ</span>
+            <span>{isVideo ? "WATCH / READ" : "READ"}</span>
             <ArrowUpRight className="w-3 h-3" />
           </Link>
         </div>

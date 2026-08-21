@@ -31,6 +31,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
   const [readTime, setReadTime] = useState("3 min read");
   const [featured, setFeatured] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [mediaList, setMediaList] = useState<{ url: string; type: "image" | "video" }[]>([]);
   const [paragraphs, setParagraphs] = useState<string[]>([""]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initialized, setInitialized] = useState(false);
@@ -46,6 +47,10 @@ export default function EditPostPage({ params }: EditPostPageProps) {
       setReadTime(article.readTime || "3 min read");
       setFeatured(Boolean(article.featured));
       setImageUrl(article.image || "");
+      setMediaList(article.mediaList || (article.image ? [{
+        url: article.image,
+        type: article.image.match(/\.(mp4|webm|mov|mkv|avi)$/i) || article.image.includes("/videos/") ? "video" : "image"
+      }] : []));
       setParagraphs(article.content && article.content.length > 0 ? article.content : [""]);
       setInitialized(true);
     }
@@ -84,8 +89,9 @@ export default function EditPostPage({ params }: EditPostPageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !imageUrl) {
-      alert("Please provide an article title and a feature image.");
+    const primaryMedia = imageUrl || (mediaList[0] ? mediaList[0].url : "");
+    if (!title.trim() || !primaryMedia) {
+      alert("Please provide an article title and a feature image or video.");
       return;
     }
 
@@ -94,12 +100,18 @@ export default function EditPostPage({ params }: EditPostPageProps) {
     const selectedCatObj = categories.find((c) => c.slug === categorySlug);
     const catName = selectedCatObj ? selectedCatObj.name : "News";
 
+    const allMediaItems = mediaList.length > 0 ? mediaList : [{
+      url: primaryMedia,
+      type: primaryMedia.match(/\.(mp4|webm|mov|mkv|avi)$/i) || primaryMedia.includes("/videos/") ? ("video" as const) : ("image" as const)
+    }];
+
     await updateArticle(article?.id || id, {
       title: title.trim(),
       slug: slug.trim() || article?.slug || `story-${Date.now()}`,
-      excerpt: excerpt.trim() || paragraphs[0].slice(0, 120),
+      excerpt: excerpt.trim() || (paragraphs[0] ? paragraphs[0].slice(0, 120) : ""),
       content: paragraphs.filter((p) => p.trim().length > 0),
-      image: imageUrl,
+      image: primaryMedia,
+      mediaList: allMediaItems,
       category: catName,
       categorySlug: categorySlug,
       location: location.trim() || "Lagos",
@@ -241,10 +253,26 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             </div>
 
             <MediaUploader
-              folder="funalltheway/posts"
+              folder="posts"
               initialUrl={imageUrl}
               allowMultiple={true}
-              onUploadSuccess={(url) => setImageUrl(url)}
+              onUploadSuccess={(url, type, allUrls) => {
+                setImageUrl(url);
+                if (allUrls && allUrls.length > 0) {
+                  setMediaList(
+                    allUrls.map((u) => ({
+                      url: u,
+                      type:
+                        u.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
+                        u.includes("/videos/")
+                          ? "video"
+                          : "image",
+                    }))
+                  );
+                } else if (url) {
+                  setMediaList([{ url, type }]);
+                }
+              }}
             />
 
             <div className="pt-1">

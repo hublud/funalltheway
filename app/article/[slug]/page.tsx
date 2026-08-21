@@ -2,7 +2,7 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { Calendar, Clock, ArrowLeft, ArrowRight, Tag, AlertCircle } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, Tag, AlertCircle, Images, Film, Play } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Badge } from "@/components/ui/Badge";
 import { BlogImage } from "@/components/ui/BlogImage";
@@ -119,13 +119,14 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
           </div>
         </div>
 
-        {/* Feature Media: Full uncropped image, centered & proportioned */}
+        {/* Feature Media: Video or Full Uncropped Proportional Image */}
         <div className="mb-6 flex items-center justify-center">
           <div className="max-w-xl sm:max-w-2xl w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 flex items-center justify-center shadow-sm">
-            {article.image.endsWith(".mp4") ? (
+            {article.image.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) || article.image.includes("/videos/") ? (
               <video
                 src={article.image}
                 controls
+                playsInline
                 className="w-full max-h-[460px] object-contain rounded-2xl"
               />
             ) : (
@@ -158,6 +159,57 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                   {idx === 1 && <InArticleAd />}
                 </React.Fragment>
               ))}
+            </div>
+          );
+        })()}
+
+        {/* Additional Attached Media Gallery (Photos / Videos if multiple uploaded) */}
+        {(() => {
+          const additionalMedia = (article.mediaList || []).filter(
+            (m) => m.url !== article.image
+          );
+          if (additionalMedia.length === 0) return null;
+
+          return (
+            <div className="space-y-4 my-8 p-4 sm:p-6 bg-slate-50 rounded-2xl border border-slate-200">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+                <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <Images className="w-4 h-4 text-blue-600" />
+                  Attached Media & Gallery ({additionalMedia.length})
+                </h3>
+                <span className="text-[10px] text-slate-400 font-bold uppercase">Tap to view</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {additionalMedia.map((media, idx) => {
+                  const isMediaVid =
+                    media.type === "video" ||
+                    media.url.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) ||
+                    media.url.includes("/videos/");
+
+                  return (
+                    <div
+                      key={idx}
+                      className="rounded-xl overflow-hidden border border-slate-200 bg-slate-950 flex flex-col items-center justify-center shadow-xs"
+                    >
+                      {isMediaVid ? (
+                        <video
+                          src={media.url}
+                          controls
+                          playsInline
+                          className="w-full max-h-[340px] object-contain"
+                        />
+                      ) : (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={media.url}
+                          alt={`${article.title} - Media ${idx + 1}`}
+                          className="w-full max-h-[380px] object-contain"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
         })()}
