@@ -14,7 +14,7 @@ export interface Article {
     role?: string;
   };
   publishedAt: string;
-  readTime: string;
+  readTime?: string;
   views?: number;
   featured?: boolean;
   trendingRank?: number;

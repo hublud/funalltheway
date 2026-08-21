@@ -19,7 +19,6 @@ export default function CreatePostPage() {
   const [categorySlug, setCategorySlug] = useState("news");
   const [location, setLocation] = useState("Lagos");
   const [authorName, setAuthorName] = useState("FunAllTheWay Editorial");
-  const [readTime, setReadTime] = useState("3 min read");
   const [featured, setFeatured] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [paragraphs, setParagraphs] = useState<string[]>([
@@ -78,7 +77,6 @@ export default function CreatePostPage() {
         avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
         role: "Contributing Editor",
       },
-      readTime: readTime || "3 min read",
       featured: featured,
     });
 
@@ -139,37 +137,22 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            {/* Category & Read Time Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                  Category *
-                </label>
-                <select
-                  value={categorySlug}
-                  onChange={(e) => setCategorySlug(e.target.value)}
-                  className="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg font-bold text-slate-800 focus:outline-none"
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.slug} value={cat.slug}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                  Reading Time
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. 4 min read"
-                  value={readTime}
-                  onChange={(e) => setReadTime(e.target.value)}
-                  className="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none"
-                />
-              </div>
+            {/* Category */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                Category *
+              </label>
+              <select
+                value={categorySlug}
+                onChange={(e) => setCategorySlug(e.target.value)}
+                className="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg font-bold text-slate-800 focus:outline-none"
+              >
+                {categories.map((cat) => (
+                  <option key={cat.slug} value={cat.slug}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Excerpt */}

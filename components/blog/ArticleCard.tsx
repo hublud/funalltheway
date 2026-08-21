@@ -60,7 +60,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         {/* Publication info / Read button */}
         <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-white/15">
           <div className="text-[11px] sm:text-xs font-bold text-slate-300 drop-shadow-sm truncate">
-            <span>{article.readTime || article.publishedAt}</span>
+            <span>{article.publishedAt}</span>
           </div>
 
           <Link

@@ -2,7 +2,7 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { Calendar, Clock, ArrowLeft, ArrowRight, Tag, AlertCircle } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight, Tag, AlertCircle } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Badge } from "@/components/ui/Badge";
 import { BlogImage } from "@/components/ui/BlogImage";
@@ -111,16 +111,9 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-slate-500">
-            <span className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              {article.publishedAt || "Recent"}
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-slate-400" />
-              {article.readTime || "3 min read"}
-            </span>
+          <div className="flex items-center gap-2 text-slate-500 text-xs">
+            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+            <span>{article.publishedAt || "Recent"}</span>
           </div>
         </div>
 
