@@ -57,17 +57,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           </h3>
         </Link>
 
-        {/* Publication info / Read button */}
-        <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-white/15">
-          <div className="text-[11px] sm:text-xs font-bold text-slate-300 drop-shadow-sm truncate">
-            <span>{article.publishedAt || "Recent"}</span>
-          </div>
-
+        {/* Action / Read button */}
+        <div className="flex items-center justify-end mt-2 pt-1.5 border-t border-white/15">
           <Link
             href={`/article/${article.slug}`}
-            className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-white/15 hover:bg-blue-600 text-white px-2.5 py-0.5 rounded-full border border-white/25 transition-colors shrink-0"
+            className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-white/15 hover:bg-blue-600 text-white px-2.5 py-0.5 rounded-full border border-white/25 transition-colors shrink-0 flex items-center gap-1"
           >
-            READ
+            <span>READ</span>
+            <ArrowUpRight className="w-3 h-3" />
           </Link>
         </div>
       </div>

@@ -139,22 +139,37 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            {/* Category */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Category *
-              </label>
-              <select
-                value={categorySlug}
-                onChange={(e) => setCategorySlug(e.target.value)}
-                className="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg font-bold text-slate-800 focus:outline-none"
-              >
-                {categories.map((cat) => (
-                  <option key={cat.slug} value={cat.slug}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+            {/* Category & Read Time Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Category *
+                </label>
+                <select
+                  value={categorySlug}
+                  onChange={(e) => setCategorySlug(e.target.value)}
+                  className="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg font-bold text-slate-800 focus:outline-none"
+                >
+                  {categories.map((cat) => (
+                    <option key={cat.slug} value={cat.slug}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Reading Time
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. 4 min read"
+                  value={readTime}
+                  onChange={(e) => setReadTime(e.target.value)}
+                  className="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none"
+                />
+              </div>
             </div>
 
             {/* Excerpt */}

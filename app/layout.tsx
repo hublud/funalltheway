@@ -4,6 +4,7 @@ import { TopAdBanner } from "@/components/ads/TopAdBanner";
 import { Header } from "@/components/layout/Header";
 import { IconCategoryNav } from "@/components/navigation/IconCategoryNav";
 import { SecondaryCategoryNav } from "@/components/navigation/SecondaryCategoryNav";
+import { WhatsAppServicesBanner } from "@/components/navigation/WhatsAppServicesBanner";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/data/siteConfig";
 
@@ -52,6 +53,9 @@ export default function RootLayout({
 
         {/* Secondary Pipe Category Navigation */}
         <SecondaryCategoryNav />
+
+        {/* WhatsApp Direct Services Action Banner */}
+        <WhatsAppServicesBanner />
 
         {/* Page Content */}
         <main className="flex-1 w-full max-w-6xl mx-auto px-4 py-6">

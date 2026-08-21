@@ -9,17 +9,26 @@ export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
   { name: "Home", slug: "/", icon: "Home", label: "Home" },
   { name: "Edited Pictures", slug: "/edited-pictures", icon: "ImageIcon", label: "Edited Picture" },
   { name: "Edited Videos", slug: "/edited-videos", icon: "Video", label: "Edited Video" },
+  { name: "Ai Editing", slug: "/ai-editing", icon: "Bot", label: "Ai Editing" },
+  { name: "Before & After Pictures", slug: "/before-after-pictures", icon: "SlidersHorizontal", label: "Before & After" },
+  { name: "Picture and Video Photoshop", slug: "/picture-video-photoshop", icon: "Layers", label: "Photoshop" },
+  { name: "Graphic Design", slug: "/graphic-design", icon: "Palette", label: "Graphic Design" },
+  { name: "Sport News", slug: "/sports", icon: "Trophy", label: "Sport News" },
+  { name: "Mixtape", slug: "/mixtapes", icon: "Disc3", label: "Mixtape" },
   { name: "Music", slug: "/music", icon: "Music", label: "Music" },
-  { name: "Videos", slug: "/videos", icon: "PlaySquare", label: "Videos" },
-  { name: "Entertainment", slug: "/entertainment", icon: "Sparkles", label: "Entertainment" },
   { name: "Celebrity", slug: "/celebrity", icon: "Flame", label: "Celebrity" },
   { name: "Comedy", slug: "/comedy", icon: "Laugh", label: "Comedy" },
 ];
 
 export const SECONDARY_CATEGORIES = [
+  { name: "AI EDITING", slug: "/ai-editing" },
+  { name: "BEFORE & AFTER PICTURES", slug: "/before-after-pictures" },
+  { name: "PICTURE & VIDEO PHOTOSHOP", slug: "/picture-video-photoshop" },
+  { name: "GRAPHIC DESIGN", slug: "/graphic-design" },
+  { name: "SPORT NEWS", slug: "/sports" },
+  { name: "MIXTAPES", slug: "/mixtapes" },
   { name: "EDITED PICTURES", slug: "/edited-pictures" },
   { name: "EDITED VIDEOS", slug: "/edited-videos" },
-  { name: "BEFORE & AFTER PICTURES", slug: "/services" },
   { name: "FREEBEATS & INSTRUMENTALS", slug: "/music?filter=freebeats" },
   { name: "NOLLYWOOD EXCLUSIVES", slug: "/celebrity" },
   { name: "VIRAL SKITS", slug: "/comedy" },
@@ -29,6 +38,42 @@ export const SECONDARY_CATEGORIES = [
 ];
 
 export const ALL_CATEGORIES = [
+  {
+    name: "Ai Editing",
+    slug: "ai-editing",
+    title: "AI Editing & Generative Visuals",
+    description: "Hyper-realistic AI portraits, futuristic visual avatars, generative expansions, AI-assisted video enhancement, and next-gen visual creations.",
+  },
+  {
+    name: "Before and after Pictures",
+    slug: "before-after-pictures",
+    title: "Before & After Transformation Pictures",
+    description: "Witness striking visual transformations, high-end studio skin retouching, background replacements, and before-and-after photo editing showcases.",
+  },
+  {
+    name: "Picture and Video Photoshop",
+    slug: "picture-video-photoshop",
+    title: "Picture & Video Photoshop Editing",
+    description: "Flawless composite edits, watermark removals, flyer mockups, video grading, and high-precision visual Photoshop retouching.",
+  },
+  {
+    name: "Graphic Design",
+    slug: "graphic-design",
+    title: "Graphic Design, Cover Art & Branding",
+    description: "Stunning flyers, album cover artworks, logos, brand identities, billboards, and digital promotional designs for artists and companies.",
+  },
+  {
+    name: "Sport News",
+    slug: "sports",
+    title: "Sports News, Football & Match Updates",
+    description: "Super Eagles news, Nigerian athletes, Premier League coverage, UEFA Champions League, and breaking transfer updates.",
+  },
+  {
+    name: "Mixtape",
+    slug: "mixtapes",
+    title: "DJ Mixtapes & Party Mixes",
+    description: "Download and stream the hottest Nigerian DJ mixtapes, Afrobeats party sets, Amapiano vibes, and trending street mixes.",
+  },
   {
     name: "Edited Pictures",
     slug: "edited-pictures",
@@ -58,12 +103,6 @@ export const ALL_CATEGORIES = [
     slug: "music",
     title: "Nigerian Music, MP3s & Freebeats",
     description: "Fresh Afrobeats bangers, EP drops, official visualizers, instrumentals, and trending chart-toppers.",
-  },
-  {
-    name: "Sports",
-    slug: "sports",
-    title: "Sports News & Match Previews",
-    description: "Super Eagles updates, Premier League coverage, UEFA Champions League analysis, and transfer rumors.",
   },
   {
     name: "Celebrity",

@@ -2,7 +2,7 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { Calendar, ArrowLeft, ArrowRight, Tag, AlertCircle } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, Tag, AlertCircle } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Badge } from "@/components/ui/Badge";
 import { BlogImage } from "@/components/ui/BlogImage";
@@ -111,7 +111,7 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-slate-500">
+          <div className="flex items-center gap-3 text-slate-500">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               {article.publishedAt || "Recent"}
@@ -119,19 +119,24 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
           </div>
         </div>
 
-        {/* Feature Media */}
-        <div className="mb-6 rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-sm">
-          {article.image.endsWith(".mp4") ? (
-            <video src={article.image} controls className="w-full max-h-[500px] object-cover" />
-          ) : (
-            <BlogImage
-              src={article.image}
-              alt={article.title}
-              aspectRatio="video"
-              priority={true}
-              className="w-full max-h-[500px]"
-            />
-          )}
+        {/* Feature Media: Full uncropped image, centered & proportioned */}
+        <div className="mb-6 flex items-center justify-center">
+          <div className="max-w-xl sm:max-w-2xl w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 flex items-center justify-center shadow-sm">
+            {article.image.endsWith(".mp4") ? (
+              <video
+                src={article.image}
+                controls
+                className="w-full max-h-[460px] object-contain rounded-2xl"
+              />
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={article.image}
+                alt={article.title}
+                className="w-full max-h-[480px] sm:max-h-[520px] object-contain rounded-2xl block mx-auto"
+              />
+            )}
+          </div>
         </div>
 
         {/* Top In-Article Ad */}
