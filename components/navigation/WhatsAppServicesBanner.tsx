@@ -12,10 +12,10 @@ export const WhatsAppServicesBanner: React.FC = () => {
       icon: Camera,
       badge: "🔥 HOT VIP DEAL • ₦100,000",
       badgeColor: "bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500 text-slate-950 font-black shadow-xs",
-      title: "We Organise & Shoot Professional Photo Shoot",
+      title: "We organize professioanl Photoshoot and Video",
       subtitle: "15 Pictures & 10 Videos with different outfits for ₦100,000",
       waText:
-        "Hello FunAllTheWay, I want to book the Professional Photo & Video Shoot Package (15 Pictures & 10 Videos with different outfits for ₦100,000).",
+        "Hello FunAllTheWay, I want to book the Professional Photoshoot and Video Package (15 Pictures & 10 Videos with different outfits for ₦100,000).",
       isFeatured: true,
     },
     {
@@ -80,7 +80,7 @@ export const WhatsAppServicesBanner: React.FC = () => {
                   </div>
 
                   {/* Text Details */}
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <span
                         className={`text-[9px] sm:text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded-xs tracking-wider flex items-center gap-1 ${item.badgeColor}`}
@@ -89,12 +89,12 @@ export const WhatsAppServicesBanner: React.FC = () => {
                         <span>{item.badge}</span>
                       </span>
                     </div>
-                    <h3 className={`text-xs sm:text-sm font-black leading-snug line-clamp-1 transition-colors ${
+                    <h3 className={`text-xs sm:text-sm font-black leading-tight transition-colors ${
                       item.isFeatured ? "text-amber-200 group-hover:text-yellow-100" : "text-white group-hover:text-emerald-200"
                     }`}>
                       {item.title}
                     </h3>
-                    <p className="text-[10px] sm:text-[11px] text-emerald-200/80 line-clamp-1">
+                    <p className="text-[10px] sm:text-[11px] text-emerald-200/80 leading-tight mt-0.5">
                       {item.subtitle}
                     </p>
                   </div>
