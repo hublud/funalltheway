@@ -12,7 +12,7 @@ export const WhatsAppServicesBanner: React.FC = () => {
       icon: Camera,
       badge: "🔥 HOT VIP DEAL • ₦100,000",
       badgeColor: "bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500 text-slate-950 font-black shadow-xs",
-      title: "We organize professioanl Photoshoot and Video",
+      title: "We organize professional Photoshoot and Video",
       subtitle: "15 Pictures & 10 Videos with different outfits for ₦100,000",
       waText:
         "Hello FunAllTheWay, I want to book the Professional Photoshoot and Video Package (15 Pictures & 10 Videos with different outfits for ₦100,000).",
