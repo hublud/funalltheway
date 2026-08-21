@@ -22,9 +22,7 @@ export default function CreatePostPage() {
   const [readTime, setReadTime] = useState("3 min read");
   const [featured, setFeatured] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const [paragraphs, setParagraphs] = useState<string[]>([
-    "Enter the first paragraph of your story here...",
-  ]);
+  const [paragraphs, setParagraphs] = useState<string[]>([""]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +66,7 @@ export default function CreatePostPage() {
     await addArticle({
       title: title.trim(),
       slug: slug.trim() || `story-${Date.now()}`,
-      excerpt: excerpt.trim() || paragraphs[0].slice(0, 120),
+      excerpt: excerpt.trim() || (paragraphs[0] ? paragraphs[0].slice(0, 120) : ""),
       content: paragraphs.filter((p) => p.trim().length > 0),
       image: imageUrl,
       category: catName,

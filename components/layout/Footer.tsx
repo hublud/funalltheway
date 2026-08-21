@@ -85,11 +85,11 @@ export const Footer: React.FC = () => {
               </a>
 
               <a
-                href="mailto:funalltheway2025@gmail.com"
+                href={`mailto:${siteConfig.contactEmail}`}
                 className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-all text-xs font-bold text-slate-300 font-mono"
               >
                 <Mail className="w-4 h-4 text-blue-400 shrink-0" />
-                <span>funalltheway2025@gmail.com</span>
+                <span>{siteConfig.contactEmail}</span>
               </a>
             </div>
           </div>

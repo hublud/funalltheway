@@ -28,7 +28,7 @@ export const siteConfig = {
     { name: "YouTube", href: "https://youtube.com", icon: "Youtube", color: "hover:text-red-600" },
     { name: "WhatsApp", href: "https://wa.me/2347053641852", icon: "MessageCircle", color: "hover:text-green-500" },
   ],
-  contactEmail: "funalltheway2025@gmail.com",
+  contactEmail: "funallthewaylimited@gmail.com",
   contactPhone: "+234 705 364 1852",
   phoneNumbers: ["07053641852", "08156763457"],
   whatsappNumber: "+234 705 364 1852",

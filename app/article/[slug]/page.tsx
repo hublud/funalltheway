@@ -88,7 +88,7 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
         </h1>
 
         {/* Excerpt Lead */}
-        {article.excerpt && (
+        {article.excerpt && !article.excerpt.includes("Enter the first paragraph") && (
           <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed mb-6 border-l-4 border-blue-600 pl-4 py-1 bg-slate-50 rounded-r">
             {article.excerpt}
           </p>
@@ -143,21 +143,24 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
         <InArticleAd />
 
         {/* Formatted Content Paragraphs */}
-        <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
-          {article.content && article.content.length > 0 ? (
-            article.content.map((para, idx) => (
-              <React.Fragment key={idx}>
-                <p>{para}</p>
-                {/* Insert Ad after 2nd paragraph */}
-                {idx === 1 && <InArticleAd />}
-              </React.Fragment>
-            ))
-          ) : (
-            <p>
-              This report contains coverage from Nigerian entertainment sources. Stay tuned for ongoing live updates on FunAllTheWayLimited.com.
-            </p>
-          )}
-        </div>
+        {(() => {
+          const validParagraphs = (article.content || []).filter(
+            (p) => p && p.trim().length > 0 && !p.includes("Enter the first paragraph")
+          );
+          if (validParagraphs.length === 0) return null;
+
+          return (
+            <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
+              {validParagraphs.map((para, idx) => (
+                <React.Fragment key={idx}>
+                  <p>{para}</p>
+                  {/* Insert Ad after 2nd paragraph */}
+                  {idx === 1 && <InArticleAd />}
+                </React.Fragment>
+              ))}
+            </div>
+          );
+        })()}
 
         {/* Article Tags */}
         {article.tags && article.tags.length > 0 && (

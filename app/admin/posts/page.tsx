@@ -213,7 +213,7 @@ export default function AdminPostsPage() {
                             <ExternalLink className="w-3 h-3 text-slate-400 shrink-0" />
                           </Link>
                           <span className="text-[11px] text-slate-400 line-clamp-1">
-                            {article.excerpt}
+                            {article.excerpt && !article.excerpt.includes("Enter the first paragraph") ? article.excerpt : ""}
                           </span>
                         </div>
                       </td>

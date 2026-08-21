@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { siteConfig } from "@/data/siteConfig";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import {
   MessageCircle,
@@ -202,10 +203,10 @@ export default function ContactPage() {
               Official Email Correspondence
             </span>
             <a
-              href="mailto:funalltheway2025@gmail.com"
+              href={`mailto:${siteConfig.contactEmail}`}
               className="text-base sm:text-lg font-bold text-white hover:text-blue-300 transition-colors font-mono"
             >
-              funalltheway2025@gmail.com
+              {siteConfig.contactEmail}
             </a>
           </div>
         </div>
