@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { TrendingUp, Clock } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { Article } from "@/types";
 import { BlogImage } from "../ui/BlogImage";
 
@@ -60,12 +60,8 @@ export const PopularPosts: React.FC<PopularPostsProps> = ({ articles, className 
               </Link>
               <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
                 <span className="font-medium text-blue-600">{article.category}</span>
-                {article.publishedAt && (
-                  <>
-                    <span>•</span>
-                    <span>{article.publishedAt}</span>
-                  </>
-                )}
+                <span>•</span>
+                <span>{article.publishedAt || "Recent"}</span>
               </div>
             </div>
           </div>

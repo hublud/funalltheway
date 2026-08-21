@@ -28,6 +28,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
   const [categorySlug, setCategorySlug] = useState("news");
   const [location, setLocation] = useState("Lagos");
   const [authorName, setAuthorName] = useState("FunAllTheWay Editorial");
+  const [readTime, setReadTime] = useState("3 min read");
   const [featured, setFeatured] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [paragraphs, setParagraphs] = useState<string[]>([""]);
@@ -42,6 +43,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
       setCategorySlug(article.categorySlug || "news");
       setLocation(article.location || "Lagos");
       setAuthorName(article.author?.name || "Editor");
+      setReadTime(article.readTime || "3 min read");
       setFeatured(Boolean(article.featured));
       setImageUrl(article.image || "");
       setParagraphs(article.content && article.content.length > 0 ? article.content : [""]);
@@ -106,6 +108,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
         avatar: article?.author?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
         role: "Contributing Editor",
       },
+      readTime: readTime || "3 min read",
       featured: featured,
     });
 

@@ -111,9 +111,11 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-slate-500 text-xs">
-            <Calendar className="w-3.5 h-3.5 text-slate-400" />
-            <span>{article.publishedAt || "Recent"}</span>
+          <div className="flex items-center gap-2 text-slate-500">
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+              {article.publishedAt || "Recent"}
+            </span>
           </div>
         </div>
 
