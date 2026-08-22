@@ -12,6 +12,7 @@ export default function AiEditingPage() {
     <CategoryPageTemplate
       title="AI Editing & Next-Gen Visuals"
       categoryName="Ai Editing"
+      categorySlug="ai-editing"
       description="Hyper-realistic AI portraits, visual avatar transformations, generative scene expansions, and AI-assisted video editing showcases."
     />
   );

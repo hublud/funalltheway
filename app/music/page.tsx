@@ -1,7 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
 import { CategoryPageTemplate } from "@/components/blog/CategoryPageTemplate";
-import { MOCK_ARTICLES } from "@/data/mockArticles";
 
 export const metadata: Metadata = {
   title: "Music, MP3s & Freebeats | Fun All The Way Limited",
@@ -9,14 +8,12 @@ export const metadata: Metadata = {
 };
 
 export default function MusicPage() {
-  const articles = MOCK_ARTICLES.filter((a) => a.categorySlug === "music");
-
   return (
     <CategoryPageTemplate
       title="Nigerian Music, Chart Hits & Freebeats"
       categoryName="Music"
+      categorySlug="music"
       description="Stream and explore chart-topping Afrobeats singles, studio instrumentals, producer freebeats, and backstage interviews with your favorite music stars."
-      articles={articles.length > 0 ? articles : MOCK_ARTICLES}
     />
   );
 }

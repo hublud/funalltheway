@@ -3,16 +3,17 @@ import { Metadata } from "next";
 import { CategoryPageTemplate } from "@/components/blog/CategoryPageTemplate";
 
 export const metadata: Metadata = {
-  title: "Picture and Video Photoshoot | Fun All The Way Limited",
-  description: "Professional photoshoot and video shoot sessions by Fun All The Way Limited.",
+  title: "Picture & Video Photoshop | Fun All The Way Limited",
+  description: "Advanced Photoshop editing, visual color grading, image composites, and creative video manipulation.",
 };
 
 export default function PictureVideoPhotoshopPage() {
   return (
     <CategoryPageTemplate
-      title="Picture & Video Photoshoot Sessions"
-      categoryName="Picture and Video Photoshoot"
-      description="Professional studio and outdoor photoshoot sessions, video shoots, event coverage, model lookbooks, and high-resolution picture sessions."
+      title="Picture & Video Photoshop Magic"
+      categoryName="Picture & Video Photoshop"
+      categorySlug="picture-video-photoshop"
+      description="Advanced photo manipulation, creative Photoshop artwork, background composites, digital art retouching, and visual color grading."
     />
   );
 }

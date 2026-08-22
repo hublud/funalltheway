@@ -1,24 +1,19 @@
 import React from "react";
 import { Metadata } from "next";
 import { CategoryPageTemplate } from "@/components/blog/CategoryPageTemplate";
-import { MOCK_ARTICLES } from "@/data/mockArticles";
 
 export const metadata: Metadata = {
-  title: "Latest News | Fun All The Way Limited",
-  description: "Breaking news, political updates, trending stories, and happening events across Nigeria.",
+  title: "Latest Nigerian News | Fun All The Way Limited",
+  description: "Real-time updates, breaking headlines, national developments, and trending news across Nigeria.",
 };
 
 export default function NewsPage() {
-  const articles = MOCK_ARTICLES.filter(
-    (a) => a.categorySlug === "news" || a.categorySlug === "entertainment"
-  );
-
   return (
     <CategoryPageTemplate
       title="Latest Nigerian & Global News"
       categoryName="News"
-      description="Stay ahead with real-time reporting, trending national discussions, exclusive interviews, and breaking developments from Lagos, Abuja, and around the world."
-      articles={articles.length > 0 ? articles : MOCK_ARTICLES}
+      categorySlug="news"
+      description="Stay updated with authentic, real-time reports on politics, entertainment, culture, national developments, and breaking headlines from across Nigeria."
     />
   );
 }

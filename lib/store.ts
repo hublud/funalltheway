@@ -286,8 +286,14 @@ class DataStore {
   }
 
   public async addArticle(article: Omit<Article, "id" | "publishedAt" | "views">): Promise<Article> {
+    let finalSlug = (article.slug || "").trim() || `story-${Date.now()}`;
+    if (this.articles.some((a) => a.slug === finalSlug)) {
+      finalSlug = `${finalSlug}-${Date.now().toString().slice(-4)}`;
+    }
+
     const newArticle: Article = {
       ...article,
+      slug: finalSlug,
       id: `post_${Date.now()}`,
       publishedAt: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
       views: 0,
@@ -307,7 +313,7 @@ class DataStore {
     }
 
     try {
-      await this.supabase.from("articles").insert({
+      const { error: insertErr } = await this.supabase.from("articles").insert({
         title: newArticle.title,
         slug: newArticle.slug,
         excerpt: newArticle.excerpt,
@@ -323,8 +329,12 @@ class DataStore {
         featured: newArticle.featured,
         tags: allTags,
       });
+
+      if (insertErr) {
+        console.error("Supabase insert error:", insertErr);
+      }
     } catch (e) {
-      console.error("Supabase insert error:", e);
+      console.error("Supabase insert exception:", e);
     }
 
     return newArticle;

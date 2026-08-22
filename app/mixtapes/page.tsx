@@ -10,9 +10,10 @@ export const metadata: Metadata = {
 export default function MixtapesPage() {
   return (
     <CategoryPageTemplate
-      title="DJ Mixtapes, Afrobeats & Club Mixes"
+      title="DJ Mixtapes & Non-Stop Party Mixes"
       categoryName="Mixtape"
-      description="Download and stream the hottest Nigerian DJ mixtapes, Afrobeats party sets, Amapiano vibes, hype sessions, and trending street mixes."
+      categorySlug="mixtapes"
+      description="Download and stream the hottest Nigerian DJ club mixtapes, trending Afrobeats party sets, Amapiano vibes, and non-stop street playlists."
     />
   );
 }

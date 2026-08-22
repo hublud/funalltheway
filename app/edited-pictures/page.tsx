@@ -12,6 +12,7 @@ export default function EditedPicturesPage() {
     <CategoryPageTemplate
       title="Edited Pictures & Retouching Showcases"
       categoryName="Edited Pictures"
+      categorySlug="edited-pictures"
       description="Explore our high-end photo editing portfolio: studio retouching, luxury background replacements, wardrobe modifications, and viral visual transformations."
     />
   );

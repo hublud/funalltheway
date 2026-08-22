@@ -1,22 +1,19 @@
 import React from "react";
 import { Metadata } from "next";
 import { CategoryPageTemplate } from "@/components/blog/CategoryPageTemplate";
-import { MOCK_ARTICLES } from "@/data/mockArticles";
 
 export const metadata: Metadata = {
-  title: "Creative & Media Jobs in Nigeria | Fun All The Way Limited",
-  description: "Browse verified job vacancies for video editors, graphic designers, content creators, copywriters, and social media managers.",
+  title: "Job Openings & Careers | Fun All The Way Limited",
+  description: "Browse verified job vacancies, creative media gigs, freelance opportunities, and corporate openings in Nigeria.",
 };
 
 export default function JobsPage() {
-  const articles = MOCK_ARTICLES.filter((a) => a.categorySlug === "jobs");
-
   return (
     <CategoryPageTemplate
-      title="Creative, Media & Editing Jobs Available"
+      title="Verified Job Vacancies & Creative Gigs"
       categoryName="Jobs"
-      description="Find verified openings for video editors, AI prompt designers, graphic creators, social media managers, and music studio assistants in Nigeria."
-      articles={articles.length > 0 ? articles : MOCK_ARTICLES}
+      categorySlug="jobs"
+      description="Find the latest job openings, freelance graphic design & video editing contracts, digital media opportunities, and corporate vacancies across Nigeria."
     />
   );
 }

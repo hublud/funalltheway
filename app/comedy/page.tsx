@@ -1,22 +1,19 @@
 import React from "react";
 import { Metadata } from "next";
 import { CategoryPageTemplate } from "@/components/blog/CategoryPageTemplate";
-import { MOCK_ARTICLES } from "@/data/mockArticles";
 
 export const metadata: Metadata = {
-  title: "Comedy Skits & Viral Jokes | Fun All The Way Limited",
-  description: "Watch the funniest Nigerian comedy skits, viral creator clips, stand-up routines, and memes.",
+  title: "Comedy Skits & Viral Videos | Fun All The Way Limited",
+  description: "Watch hilarious comedy skits, street interviews, and viral jokes from top Nigerian content creators.",
 };
 
 export default function ComedyPage() {
-  const articles = MOCK_ARTICLES.filter((a) => a.categorySlug === "comedy");
-
   return (
     <CategoryPageTemplate
-      title="Comedy Skits, Stand-Up & Jokes"
+      title="Viral Comedy Skits & Laughs"
       categoryName="Comedy"
-      description="Enjoy non-stop laughter with Nigeria's most creative comedic masters, trending skit creators, and meme culture highlights."
-      articles={articles.length > 0 ? articles : MOCK_ARTICLES}
+      categorySlug="comedy"
+      description="Enjoy non-stop laughs with viral comedy videos, trending comedian skits, street pranks, and hilarious parodies from across Africa."
     />
   );
 }
