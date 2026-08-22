@@ -313,24 +313,30 @@ class DataStore {
     }
 
     try {
-      const { error: insertErr } = await this.supabase.from("articles").insert({
-        title: newArticle.title,
-        slug: newArticle.slug,
-        excerpt: newArticle.excerpt,
-        content: newArticle.content || [],
-        image: newArticle.image,
-        category_name: newArticle.category,
-        category_slug: newArticle.categorySlug,
-        location: newArticle.location,
-        author_name: newArticle.author.name,
-        author_avatar: newArticle.author.avatar,
-        author_role: newArticle.author.role,
-        read_time: newArticle.readTime,
-        featured: newArticle.featured,
-        tags: allTags,
-      });
+      const { data, error: insertErr } = await this.supabase
+        .from("articles")
+        .insert({
+          title: newArticle.title,
+          slug: newArticle.slug,
+          excerpt: newArticle.excerpt,
+          content: newArticle.content || [],
+          image: newArticle.image,
+          category_name: newArticle.category,
+          category_slug: newArticle.categorySlug,
+          location: newArticle.location,
+          author_name: newArticle.author.name,
+          author_avatar: newArticle.author.avatar,
+          author_role: newArticle.author.role,
+          read_time: newArticle.readTime,
+          featured: newArticle.featured,
+          tags: allTags,
+        })
+        .select();
 
-      if (insertErr) {
+      if (!insertErr && data && data.length > 0) {
+        newArticle.id = data[0].id;
+        this.saveLocally();
+      } else if (insertErr) {
         console.error("Supabase insert error:", insertErr);
       }
     } catch (e) {
