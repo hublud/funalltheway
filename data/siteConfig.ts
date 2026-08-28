@@ -6,8 +6,6 @@ export const siteConfig = {
   url: "https://funallthewaylimited.com",
   mainNav: [
     { label: "Home", href: "/" },
-    { label: "Edited Pictures", href: "/edited-pictures" },
-    { label: "Edited Videos", href: "/edited-videos" },
     { label: "Our Services", href: "/services" },
     { label: "About", href: "/about" },
     { label: "Job Board", href: "/jobs" },

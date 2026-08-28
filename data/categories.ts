@@ -23,6 +23,8 @@ export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
 ];
 
 export const SECONDARY_CATEGORIES = [
+  { name: "EDITED PICTURES", slug: "/edited-pictures" },
+  { name: "EDITED VIDEOS", slug: "/edited-videos" },
   { name: "ENTERTAINMENT", slug: "/entertainment" },
   { name: "MUSIC VIDEOS", slug: "/music-videos" },
   { name: "AI EDITING", slug: "/ai-editing" },
@@ -31,8 +33,6 @@ export const SECONDARY_CATEGORIES = [
   { name: "GRAPHIC DESIGN", slug: "/graphic-design" },
   { name: "SPORT NEWS", slug: "/sports" },
   { name: "MIXTAPES", slug: "/mixtapes" },
-  { name: "EDITED PICTURES", slug: "/edited-pictures" },
-  { name: "EDITED VIDEOS", slug: "/edited-videos" },
   { name: "FREEBEATS & INSTRUMENTALS", slug: "/music?filter=freebeats" },
   { name: "NOLLYWOOD EXCLUSIVES", slug: "/celebrity" },
   { name: "VIRAL SKITS", slug: "/comedy" },
