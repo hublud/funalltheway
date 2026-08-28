@@ -1,20 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { useStore } from "@/lib/store";
 import { Plus, Search, Trash2, ExternalLink, Filter, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DeleteModal } from "@/components/admin/DeleteModal";
 
-export default function AdminPostsPage() {
+function AdminPostsContent() {
   const { articles, deleteArticle } = useStore();
+  const searchParams = useSearchParams();
+  const initialCat = searchParams.get("category") || "all";
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(initialCat);
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; slug: string; title: string } | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletedNotification, setDeletedNotification] = useState<string | null>(null);
+
+  useEffect(() => {
+    const cat = searchParams.get("category");
+    if (cat) {
+      setSelectedCategory(cat);
+    }
+  }, [searchParams]);
 
   const categories = Array.from(new Set(articles.map((a) => a.category)));
 
@@ -289,5 +300,13 @@ export default function AdminPostsPage() {
         isDeleting={isDeleting}
       />
     </div>
+  );
+}
+
+export default function AdminPostsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-400 font-bold">Loading Posts...</div>}>
+      <AdminPostsContent />
+    </Suspense>
   );
 }

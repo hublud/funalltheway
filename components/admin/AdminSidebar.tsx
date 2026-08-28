@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   FileText,
   FolderTree,
+  BarChart3,
   Megaphone,
   Image as ImageIcon,
   ExternalLink,
@@ -25,6 +26,7 @@ export const AdminSidebar: React.FC = () => {
     { label: "All Posts", href: "/admin/posts", icon: FileText },
     { label: "New Post", href: "/admin/posts/new", icon: PlusCircle },
     { label: "Categories", href: "/admin/categories", icon: FolderTree },
+    { label: "Stats & Analytics", href: "/admin/stats", icon: BarChart3 },
     { label: "Banner Ads", href: "/admin/ads", icon: Megaphone },
     { label: "Media Library", href: "/admin/media", icon: ImageIcon },
   ];

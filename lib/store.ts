@@ -95,7 +95,11 @@ class DataStore {
         const parsed = JSON.parse(storedCategories);
         const existingSlugs = new Set(parsed.map((cat: any) => cat.slug));
         const missing = INITIAL_CATEGORIES.filter((c) => !existingSlugs.has(c.slug));
-        this.categories = [...parsed, ...missing];
+        const updated = parsed.map((cat: any) => {
+          const init = INITIAL_CATEGORIES.find((i) => i.slug === cat.slug);
+          return init ? { ...cat, isPrimaryIcon: init.isPrimaryIcon ?? cat.isPrimaryIcon } : cat;
+        });
+        this.categories = [...updated, ...missing];
       } else {
         this.categories = INITIAL_CATEGORIES;
       }
@@ -176,6 +180,7 @@ class DataStore {
                   year: "numeric",
                 })
               : "Recent",
+            createdAt: row.created_at || (row.published_at ? new Date(row.published_at).toISOString() : new Date().toISOString()),
             readTime: row.read_time || "3 min read",
             views: row.views || 0,
             featured: Boolean(row.featured),
@@ -291,11 +296,13 @@ class DataStore {
       finalSlug = `${finalSlug}-${Date.now().toString().slice(-4)}`;
     }
 
+    const now = new Date();
     const newArticle: Article = {
       ...article,
       slug: finalSlug,
-      id: `post_${Date.now()}`,
-      publishedAt: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      id: `post_${now.getTime()}`,
+      publishedAt: now.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      createdAt: now.toISOString(),
       views: 0,
     };
     this.articles = [newArticle, ...this.articles];

@@ -7,6 +7,9 @@ export interface NavCategory {
 
 export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
   { name: "Home", slug: "/", icon: "Home", label: "Home" },
+  { name: "Entertainment", slug: "/entertainment", icon: "Sparkles", label: "Entertainment" },
+  { name: "Music Video", slug: "/music-videos", icon: "PlaySquare", label: "Music Video" },
+  { name: "Music", slug: "/music", icon: "Music", label: "Music" },
   { name: "Edited Pictures", slug: "/edited-pictures", icon: "ImageIcon", label: "Edited Picture" },
   { name: "Edited Videos", slug: "/edited-videos", icon: "Video", label: "Edited Video" },
   { name: "Ai Editing", slug: "/ai-editing", icon: "Bot", label: "Ai Editing" },
@@ -15,12 +18,13 @@ export const PRIMARY_ICON_CATEGORIES: NavCategory[] = [
   { name: "Graphic Design", slug: "/graphic-design", icon: "Palette", label: "Graphic Design" },
   { name: "Sport News", slug: "/sports", icon: "Trophy", label: "Sport News" },
   { name: "Mixtape", slug: "/mixtapes", icon: "Disc3", label: "Mixtape" },
-  { name: "Music", slug: "/music", icon: "Music", label: "Music" },
   { name: "Celebrity", slug: "/celebrity", icon: "Flame", label: "Celebrity" },
   { name: "Comedy", slug: "/comedy", icon: "Laugh", label: "Comedy" },
 ];
 
 export const SECONDARY_CATEGORIES = [
+  { name: "ENTERTAINMENT", slug: "/entertainment" },
+  { name: "MUSIC VIDEOS", slug: "/music-videos" },
   { name: "AI EDITING", slug: "/ai-editing" },
   { name: "BEFORE & AFTER PICTURES", slug: "/before-after-pictures" },
   { name: "PICTURE & VIDEO PHOTOSHOOT", slug: "/picture-video-photoshoot" },
@@ -38,6 +42,18 @@ export const SECONDARY_CATEGORIES = [
 ];
 
 export const ALL_CATEGORIES = [
+  {
+    name: "Entertainment",
+    slug: "entertainment",
+    title: "Entertainment News & Highlights",
+    description: "The hottest entertainment scoops, movie reviews, pop culture updates, concert highlights, and viral content making waves.",
+  },
+  {
+    name: "Music Video",
+    slug: "music-videos",
+    title: "Official Music Videos & Visuals",
+    description: "Stream the latest Nigerian and global music videos, official Afrobeats visuals, 4K video premieres, dance clips, and behind-the-scenes footage.",
+  },
   {
     name: "Ai Editing",
     slug: "ai-editing",
@@ -91,12 +107,6 @@ export const ALL_CATEGORIES = [
     slug: "news",
     title: "Latest Nigerian & World News",
     description: "Breaking news, political updates, trending developments, and real-time happenings across Nigeria and globally.",
-  },
-  {
-    name: "Entertainment",
-    slug: "entertainment",
-    title: "Entertainment News & Highlights",
-    description: "The hottest entertainment scoops, movie reviews, pop culture updates, and viral content making waves.",
   },
   {
     name: "Music",

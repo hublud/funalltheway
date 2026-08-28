@@ -38,6 +38,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
     { label: "🎧 Mixtape", href: "/mixtapes" },
     { label: "News", href: "/news" },
     { label: "Entertainment", href: "/entertainment" },
+    { label: "Music Videos", href: "/music-videos" },
     { label: "Music", href: "/music" },
     { label: "Celebrity", href: "/celebrity" },
     { label: "Lifestyle", href: "/lifestyle" },

@@ -92,24 +92,46 @@ export default function AdminOverviewPage() {
           })}
         </div>
 
-        {/* Cloudinary & Quick Post Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5">
-          {/* Cloudinary Card */}
-          <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        {/* Analytics & Quick Action Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-5">
+          {/* Category Stats Card */}
+          <div className="bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between space-y-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Cloud className="w-5 h-5 text-yellow-300 shrink-0" />
-                <h3 className="font-bold text-sm sm:text-base">Cloudinary CDN Storage</h3>
+                <TrendingUp className="w-5 h-5 text-emerald-400 shrink-0" />
+                <h3 className="font-bold text-sm sm:text-base">Category Velocity & Stats</h3>
               </div>
-              <p className="text-xs text-blue-100 max-w-md leading-relaxed">
-                Cloud Name: <strong className="text-yellow-300 font-mono">qoi6iykg</strong>. Auto-optimizing JPEG, WebP & MP4 visualizers.
+              <p className="text-xs text-blue-100 leading-relaxed">
+                Inspect daily, weekly, and monthly publication metrics across all categories.
               </p>
             </div>
-            <Link href="/admin/media" className="w-full sm:w-auto">
+            <Link href="/admin/stats">
               <Button
                 variant="primary"
                 size="sm"
-                className="bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-bold text-xs uppercase w-full sm:w-auto"
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase w-full"
+              >
+                Open Stats Tab
+              </Button>
+            </Link>
+          </div>
+
+          {/* Cloudinary Card */}
+          <div className="bg-gradient-to-r from-blue-950 to-indigo-950 text-white rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between space-y-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Cloud className="w-5 h-5 text-yellow-300 shrink-0" />
+                <h3 className="font-bold text-sm sm:text-base">Cloudinary CDN</h3>
+              </div>
+              <p className="text-xs text-blue-100 leading-relaxed">
+                Cloud: <strong className="text-yellow-300 font-mono">qoi6iykg</strong>. Auto-optimizing JPEG, WebP & MP4 assets.
+              </p>
+            </div>
+            <Link href="/admin/media">
+              <Button
+                variant="primary"
+                size="sm"
+                className="bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-bold text-xs uppercase w-full"
               >
                 Open Media
               </Button>
@@ -117,15 +139,15 @@ export default function AdminOverviewPage() {
           </div>
 
           {/* Quick Post Action Card */}
-          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
+          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-xs flex flex-col justify-between space-y-3">
+            <div className="space-y-1">
               <h3 className="font-bold text-sm sm:text-base text-slate-900">Publish New Story</h3>
               <p className="text-xs text-slate-500">
                 Write a breaking gist or upload a new Afrobeats song release.
               </p>
             </div>
-            <Link href="/admin/posts/new" className="w-full sm:w-auto">
-              <Button variant="primary" size="sm" className="font-bold text-xs uppercase w-full sm:w-auto">
+            <Link href="/admin/posts/new">
+              <Button variant="primary" size="sm" className="font-bold text-xs uppercase w-full">
                 <Plus className="w-4 h-4 mr-1" />
                 New Article
               </Button>

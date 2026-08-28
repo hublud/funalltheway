@@ -23,6 +23,7 @@ export interface Article {
     role?: string;
   };
   publishedAt: string;
+  createdAt?: string;
   readTime: string;
   views?: number;
   featured?: boolean;
