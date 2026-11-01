@@ -152,13 +152,52 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
 
           return (
             <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
-              {validParagraphs.map((para, idx) => (
-                <React.Fragment key={idx}>
-                  <p>{para}</p>
-                  {/* Insert Ad after 2nd paragraph */}
-                  {idx === 1 && <InArticleAd />}
-                </React.Fragment>
-              ))}
+              {validParagraphs.map((para, idx) => {
+                const ytMatch = para.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+                const isDirectVideo = para.match(/https?:\/\/[^\s]+\.(mp4|webm|mov|mkv)/i);
+                const isAudio = para.match(/https?:\/\/[^\s]+\.mp3/i);
+
+                return (
+                  <React.Fragment key={idx}>
+                    {ytMatch ? (
+                      <div className="my-6">
+                        <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-950">
+                          <iframe
+                            src={`https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=0&rel=0`}
+                            title={`${article.title} - Video Player`}
+                            className="w-full h-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        </div>
+                        {para.replace(/https?:\/\/[^\s]+/g, '').replace(/[▶️🎥]/g, '').trim().length > 5 && (
+                          <p className="text-xs text-slate-500 mt-2 font-medium">
+                            {para.replace(/https?:\/\/[^\s]+/g, '').replace(/[▶️🎥]/g, '').trim()}
+                          </p>
+                        )}
+                      </div>
+                    ) : isDirectVideo ? (
+                      <div className="my-6 rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-950">
+                        <video
+                          src={isDirectVideo[0]}
+                          controls
+                          playsInline
+                          className="w-full max-h-[460px] object-contain rounded-2xl"
+                        />
+                      </div>
+                    ) : isAudio ? (
+                      <div className="my-4 p-4 rounded-xl bg-slate-100 border border-slate-200">
+                        <p className="text-xs font-bold text-slate-700 mb-2">🎵 Audio Player</p>
+                        <audio src={isAudio[0]} controls className="w-full" />
+                      </div>
+                    ) : (
+                      <p>{para}</p>
+                    )}
+                    {/* Insert Ad after 2nd paragraph */}
+                    {idx === 1 && <InArticleAd />}
+                  </React.Fragment>
+                );
+              })}
             </div>
           );
         })()}
