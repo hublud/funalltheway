@@ -2,7 +2,7 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { Calendar, Clock, ArrowLeft, ArrowRight, Tag, AlertCircle, Images, Film, Play } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, Tag, AlertCircle, Images, Film, Play, Download, ChevronDown, Music, Headphones } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Badge } from "@/components/ui/Badge";
 import { BlogImage } from "@/components/ui/BlogImage";
@@ -143,61 +143,192 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
         {/* Top In-Article Ad */}
         <InArticleAd />
 
-        {/* Formatted Content Paragraphs */}
+        {/* Formatted Content Paragraphs & Dedicated Media Players */}
         {(() => {
-          const validParagraphs = (article.content || []).filter(
-            (p) => p && p.trim().length > 0 && !p.includes("Enter the first paragraph")
-          );
-          if (validParagraphs.length === 0) return null;
+          const isAudioCategory =
+            article.categorySlug === 'mixtapes' ||
+            article.categorySlug === 'music' ||
+            (article.category && (article.category.toLowerCase().includes('mixtape') || article.category.toLowerCase().includes('music')));
+
+          // Resolve Audio and Stream URLs
+          let audioMp3Url: string | null = null;
+          let audioStreamUrl: string | null = null;
+
+          (article.tags || []).forEach((t) => {
+            if (t.startsWith('MEDIA:') && t.toLowerCase().includes('.mp3')) {
+              audioMp3Url = t.replace('MEDIA:', '').trim();
+            }
+            if (t.startsWith('STREAM:')) {
+              audioStreamUrl = t.replace('STREAM:', '').trim();
+            }
+          });
+
+          // Check content for MP3 or Stream URLs
+          (article.content || []).forEach((p) => {
+            if (!audioMp3Url) {
+              const m = p.match(/https?:\/\/[^\s"'<>]+\.mp3(?:\?[^\s"'<>]*)?/i);
+              if (m) audioMp3Url = m[0];
+            }
+            if (!audioStreamUrl) {
+              const s = p.match(/https?:\/\/(?:www\.)?audiomack\.com\/[^\s"'<>]+/i);
+              if (s) audioStreamUrl = s[0];
+            }
+          });
+
+          // Track Title & Artist breakdown
+          const rawTitle = article.title || '';
+          let trackTitle = rawTitle.replace(/^\[?(?:Gospel\s+)?Mixtape\]?\s*(?:Mp3:?-?)?\s*/i, '').replace(/^Download\s+(?:Mixtape\s+)?(?:Mp3:?-?)?\s*/i, '').trim();
+          let artistName = "By FunAllTheWay Editorial";
+          if (trackTitle.includes(" - ")) {
+            const parts = trackTitle.split(" - ");
+            artistName = `By ${parts[0].trim()}`;
+            trackTitle = parts.slice(1).join(" - ").trim();
+          } else if (trackTitle.includes(" by ")) {
+            const parts = trackTitle.split(/ by /i);
+            trackTitle = parts[0].trim();
+            artistName = `By ${parts[1].trim()}`;
+          }
+
+          // Filter paragraphs
+          const validParagraphs = (article.content || [])
+            .map((p) => {
+              // Strip any raw HTML tags (e.g. <div class="..."> or <iframe...>)
+              return p.replace(/<[^>]+>/g, '').trim();
+            })
+            .filter((p) => {
+              if (!p || p.length < 5 || p.includes("Enter the first paragraph")) return false;
+              // If audio category, discard advertiser YouTube video links and raw MP3/Stream lines
+              if (isAudioCategory) {
+                if (p.includes("Watch Official Video on YouTube") || p.includes("youtube.com/") || p.includes("youtu.be/")) return false;
+                if (p.includes("MP3 Download:") || p.includes("Download & Stream MP3 Audio:") || p.includes("Stream: https://")) return false;
+              }
+              return true;
+            });
 
           return (
-            <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
-              {validParagraphs.map((para, idx) => {
-                const ytMatch = para.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
-                const isDirectVideo = para.match(/https?:\/\/[^\s]+\.(mp4|webm|mov|mkv)/i);
-                const isAudio = para.match(/https?:\/\/[^\s]+\.mp3/i);
-
-                return (
-                  <React.Fragment key={idx}>
-                    {ytMatch ? (
-                      <div className="my-6">
-                        <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-950">
-                          <iframe
-                            src={`https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=0&rel=0`}
-                            title={`${article.title} - Video Player`}
-                            className="w-full h-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                          />
-                        </div>
-                        {para.replace(/https?:\/\/[^\s]+/g, '').replace(/[▶️🎥]/g, '').trim().length > 5 && (
-                          <p className="text-xs text-slate-500 mt-2 font-medium">
-                            {para.replace(/https?:\/\/[^\s]+/g, '').replace(/[▶️🎥]/g, '').trim()}
-                          </p>
-                        )}
-                      </div>
-                    ) : isDirectVideo ? (
-                      <div className="my-6 rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-950">
-                        <video
-                          src={isDirectVideo[0]}
-                          controls
-                          playsInline
-                          className="w-full max-h-[460px] object-contain rounded-2xl"
+            <div className="space-y-6">
+              {/* Dedicated Sleek Audio Player for Mixtapes and Music (Matching User Reference) */}
+              {(isAudioCategory || audioMp3Url || audioStreamUrl) && (
+                <div className="my-6 rounded-2xl bg-black border border-neutral-800 p-5 sm:p-7 text-white shadow-2xl relative overflow-hidden">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 min-w-0">
+                      {/* Album Art Thumbnail */}
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-neutral-900 border border-neutral-700 flex-shrink-0 shadow-md">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={article.image}
+                          alt={trackTitle}
+                          className="w-full h-full object-cover"
                         />
                       </div>
-                    ) : isAudio ? (
-                      <div className="my-4 p-4 rounded-xl bg-slate-100 border border-slate-200">
-                        <p className="text-xs font-bold text-slate-700 mb-2">🎵 Audio Player</p>
-                        <audio src={isAudio[0]} controls className="w-full" />
+                      {/* Track Details */}
+                      <div className="min-w-0">
+                        <h3 className="text-base sm:text-xl font-black text-white truncate tracking-tight">
+                          {trackTitle || article.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-neutral-400 font-medium mt-0.5 truncate">
+                          {artistName}
+                        </p>
                       </div>
-                    ) : (
-                      <p>{para}</p>
+                    </div>
+                    {/* Badge */}
+                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-[10px] font-black uppercase tracking-widest text-emerald-400">
+                      <Headphones className="w-3.5 h-3.5" />
+                      <span>{article.categorySlug === 'mixtapes' ? 'MIXTAPE' : 'AUDIO'}</span>
+                    </div>
+                  </div>
+
+                  {/* Audio Player Bar */}
+                  {audioMp3Url ? (
+                    <div className="mt-5">
+                      <audio
+                        src={audioMp3Url}
+                        controls
+                        preload="metadata"
+                        className="w-full rounded-lg"
+                      />
+                    </div>
+                  ) : audioStreamUrl ? (
+                    <div className="mt-4 p-3 bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-between">
+                      <span className="text-xs text-neutral-400">Streaming player available via Audiomack</span>
+                      <a
+                        href={audioStreamUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-bold text-emerald-400 hover:underline"
+                      >
+                        Open Stream →
+                      </a>
+                    </div>
+                  ) : null}
+
+                  {/* Green Download & Stream Buttons */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-5 border-t border-neutral-900 mt-5">
+                    {audioMp3Url && (
+                      <a
+                        href={audioMp3Url}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-[#52c41a] hover:bg-[#45a816] text-white font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all active:scale-95 cursor-pointer"
+                      >
+                        <span>DOWNLOAD HERE</span>
+                        <ChevronDown className="w-4 h-4 stroke-[3]" />
+                      </a>
                     )}
-                    {/* Insert Ad after 2nd paragraph */}
-                    {idx === 1 && <InArticleAd />}
-                  </React.Fragment>
-                );
-              })}
+                    {audioStreamUrl && (
+                      <a
+                        href={audioStreamUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-[#52c41a] hover:bg-[#45a816] text-white font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all active:scale-95 cursor-pointer"
+                      >
+                        <span>STREAM HERE</span>
+                        <ChevronDown className="w-4 h-4 stroke-[3]" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Text Paragraphs & Video Embeds */}
+              <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
+                {validParagraphs.map((para, idx) => {
+                  const ytMatch = !isAudioCategory && para.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+                  const isDirectVideo = !isAudioCategory && para.match(/https?:\/\/[^\s]+\.(mp4|webm|mov|mkv)/i);
+
+                  return (
+                    <React.Fragment key={idx}>
+                      {ytMatch ? (
+                        <div className="my-6">
+                          <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-950">
+                            <iframe
+                              src={`https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=0&rel=0`}
+                              title={`${article.title} - Video Player`}
+                              className="w-full h-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                            />
+                          </div>
+                        </div>
+                      ) : isDirectVideo ? (
+                        <div className="my-6 rounded-2xl overflow-hidden shadow-xl border border-slate-200 bg-slate-950">
+                          <video
+                            src={isDirectVideo[0]}
+                            controls
+                            playsInline
+                            className="w-full max-h-[460px] object-contain rounded-2xl"
+                          />
+                        </div>
+                      ) : (
+                        <p>{para}</p>
+                      )}
+                      {/* Insert Ad after 2nd paragraph */}
+                      {idx === 1 && <InArticleAd />}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
             </div>
           );
         })()}
