@@ -150,20 +150,34 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             article.categorySlug === 'music' ||
             (article.category && (article.category.toLowerCase().includes('mixtape') || article.category.toLowerCase().includes('music')));
 
-          // Resolve Audio and Stream URLs
-          let audioMp3Url: string | null = null;
-          let audioStreamUrl: string | null = null;
+          // Resolve Audio, Stream, and Video URLs
+          let audioMp3Url: string | null = article.audioUrl || null;
+          let audioStreamUrl: string | null = article.streamUrl || null;
+          let videoEmbedUrl: string | null = article.videoUrl || null;
 
-          (article.tags || []).forEach((t) => {
-            if (t.startsWith('MEDIA:') && t.toLowerCase().includes('.mp3')) {
-              audioMp3Url = t.replace('MEDIA:', '').trim();
-            }
-            if (t.startsWith('STREAM:')) {
-              audioStreamUrl = t.replace('STREAM:', '').trim();
-            }
-          });
+          if (!audioMp3Url) {
+            (article.tags || []).forEach((t) => {
+              if (t.startsWith('MEDIA:') && t.toLowerCase().includes('.mp3')) {
+                audioMp3Url = t.replace('MEDIA:', '').trim();
+              }
+            });
+          }
+          if (!audioStreamUrl) {
+            (article.tags || []).forEach((t) => {
+              if (t.startsWith('STREAM:')) {
+                audioStreamUrl = t.replace('STREAM:', '').trim();
+              }
+            });
+          }
+          if (!videoEmbedUrl) {
+            (article.tags || []).forEach((t) => {
+              if (t.startsWith('MEDIA:') && (t.includes('youtube.com') || t.includes('youtu.be'))) {
+                videoEmbedUrl = t.replace('MEDIA:', '').trim();
+              }
+            });
+          }
 
-          // Check content for MP3 or Stream URLs
+          // Check content for MP3, Stream, or YouTube URLs
           (article.content || []).forEach((p) => {
             if (!audioMp3Url) {
               const m = p.match(/https?:\/\/[^\s"'<>]+\.mp3(?:\?[^\s"'<>]*)?/i);
@@ -173,12 +187,19 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
               const s = p.match(/https?:\/\/(?:www\.)?audiomack\.com\/[^\s"'<>]+/i);
               if (s) audioStreamUrl = s[0];
             }
+            if (!videoEmbedUrl) {
+              const y = p.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+              if (y) videoEmbedUrl = `https://www.youtube.com/watch?v=${y[1]}`;
+            }
           });
 
           // Track Title & Artist breakdown
           const rawTitle = article.title || '';
-          let trackTitle = rawTitle.replace(/^\[?(?:Gospel\s+)?Mixtape\]?\s*(?:Mp3:?-?)?\s*/i, '').replace(/^Download\s+(?:Mixtape\s+)?(?:Mp3:?-?)?\s*/i, '').trim();
-          let artistName = "By FunAllTheWay Editorial";
+          let trackTitle = rawTitle
+            .replace(/^\[?(?:Gospel\s+)?Mixtape\]?\s*(?:Mp3:?-?)?\s*/i, '')
+            .replace(/^Download\s+(?:Mixtape\s+)?(?:Mp3:?-?)?\s*/i, '')
+            .trim();
+          let artistName = "FunAllTheWay Exclusives";
           if (trackTitle.includes(" - ")) {
             const parts = trackTitle.split(" - ");
             artistName = `By ${parts[0].trim()}`;
@@ -200,98 +221,35 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
               // If audio category, discard advertiser YouTube video links and raw MP3/Stream lines
               if (isAudioCategory) {
                 if (p.includes("Watch Official Video on YouTube") || p.includes("youtube.com/") || p.includes("youtu.be/")) return false;
-                if (p.includes("MP3 Download:") || p.includes("Download & Stream MP3 Audio:") || p.includes("Stream: https://")) return false;
+                if (p.includes("MP3 Download:") || p.includes("Download & Stream MP3 Audio:") || p.includes("Stream: https://") || p.includes("Download Here:") || p.includes("Stream Here:")) return false;
               }
               return true;
             });
 
+          const hasAudioPlayer = isAudioCategory || Boolean(audioMp3Url) || Boolean(audioStreamUrl);
+
           return (
             <div className="space-y-6">
-              {/* Dedicated Sleek Audio Player for Mixtapes and Music (Matching User Reference) */}
-              {(isAudioCategory || audioMp3Url || audioStreamUrl) && (
-                <div className="my-6 rounded-2xl bg-black border border-neutral-800 p-5 sm:p-7 text-white shadow-2xl relative overflow-hidden">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 min-w-0">
-                      {/* Album Art Thumbnail */}
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-neutral-900 border border-neutral-700 flex-shrink-0 shadow-md">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={article.image}
-                          alt={trackTitle}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      {/* Track Details */}
-                      <div className="min-w-0">
-                        <h3 className="text-base sm:text-xl font-black text-white truncate tracking-tight">
-                          {trackTitle || article.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-neutral-400 font-medium mt-0.5 truncate">
-                          {artistName}
-                        </p>
-                      </div>
-                    </div>
-                    {/* Badge */}
-                    <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-700 text-[10px] font-black uppercase tracking-widest text-emerald-400">
-                      <Headphones className="w-3.5 h-3.5" />
-                      <span>{article.categorySlug === 'mixtapes' ? 'MIXTAPE' : 'AUDIO'}</span>
-                    </div>
+              {/* Quick Jump Bar for Audio Posts */}
+              {hasAudioPlayer && (
+                <div className="flex items-center justify-between p-3.5 bg-slate-900 text-white rounded-xl mb-4 shadow-sm border border-slate-800">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Headphones className="w-4 h-4 text-emerald-400 flex-shrink-0 animate-pulse" />
+                    <span className="text-xs font-bold truncate">
+                      {audioMp3Url ? 'Official MP3 Audio Track Ready' : 'Audio Track Available'}
+                    </span>
                   </div>
-
-                  {/* Audio Player Bar */}
-                  {audioMp3Url ? (
-                    <div className="mt-5">
-                      <audio
-                        src={audioMp3Url}
-                        controls
-                        preload="metadata"
-                        className="w-full rounded-lg"
-                      />
-                    </div>
-                  ) : audioStreamUrl ? (
-                    <div className="mt-4 p-3 bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-between">
-                      <span className="text-xs text-neutral-400">Streaming player available via Audiomack</span>
-                      <a
-                        href={audioStreamUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-bold text-emerald-400 hover:underline"
-                      >
-                        Open Stream →
-                      </a>
-                    </div>
-                  ) : null}
-
-                  {/* Green Download & Stream Buttons */}
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-5 border-t border-neutral-900 mt-5">
-                    {audioMp3Url && (
-                      <a
-                        href={audioMp3Url}
-                        download
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-[#52c41a] hover:bg-[#45a816] text-white font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all active:scale-95 cursor-pointer"
-                      >
-                        <span>DOWNLOAD HERE</span>
-                        <ChevronDown className="w-4 h-4 stroke-[3]" />
-                      </a>
-                    )}
-                    {audioStreamUrl && (
-                      <a
-                        href={audioStreamUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-[#52c41a] hover:bg-[#45a816] text-white font-black text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all active:scale-95 cursor-pointer"
-                      >
-                        <span>STREAM HERE</span>
-                        <ChevronDown className="w-4 h-4 stroke-[3]" />
-                      </a>
-                    )}
-                  </div>
+                  <a
+                    href="#audio-player-card"
+                    className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider bg-[#48bb78] hover:bg-[#3ba565] text-white px-3 py-1.5 rounded transition-all active:scale-95 flex-shrink-0"
+                  >
+                    <span>Download MP3</span>
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </a>
                 </div>
               )}
 
-              {/* Text Paragraphs & Video Embeds */}
+              {/* Text Paragraphs & Embedded Video Content */}
               <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
                 {validParagraphs.map((para, idx) => {
                   const ytMatch = !isAudioCategory && para.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
@@ -329,6 +287,129 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                   );
                 })}
               </div>
+
+              {/* Dedicated Sleek Dark Audio Player Card (Matching User Reference Image Exactly) */}
+              {hasAudioPlayer && (
+                <div
+                  id="audio-player-card"
+                  className="my-8 rounded-xl bg-black border border-neutral-800 p-5 sm:p-7 text-white shadow-2xl relative overflow-hidden"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 min-w-0">
+                      {/* Album Art Thumbnail */}
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden bg-neutral-900 border border-neutral-700 flex-shrink-0 shadow-md">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={article.image}
+                          alt={trackTitle}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {/* Track Details */}
+                      <div className="min-w-0">
+                        <h3 className="text-base sm:text-xl font-bold text-white truncate tracking-tight">
+                          {trackTitle || article.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-neutral-400 font-medium mt-1 truncate">
+                          {artistName}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Brand / Logo */}
+                    <div className="text-right flex-shrink-0">
+                      <span className="text-xs sm:text-sm font-black tracking-widest text-white/90 uppercase font-mono">
+                        FUNALLTHEWAY
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Audio Player Bar */}
+                  {audioMp3Url ? (
+                    <div className="mt-5">
+                      <audio
+                        id="article-audio-element"
+                        src={audioMp3Url}
+                        controls
+                        preload="metadata"
+                        className="w-full rounded bg-neutral-900 accent-[#48bb78]"
+                      />
+                    </div>
+                  ) : audioStreamUrl ? (
+                    <div className="mt-4 p-3 bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-between">
+                      <span className="text-xs text-neutral-400">Streaming player available via Audiomack</span>
+                      <a
+                        href={audioStreamUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs font-bold text-emerald-400 hover:underline"
+                      >
+                        Open Stream →
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="mt-4 p-3 bg-neutral-900 rounded-xl border border-neutral-800 text-center text-xs text-neutral-400">
+                      Audio track is currently being prepared for streaming & download
+                    </div>
+                  )}
+
+                  {/* Vertically Stacked Green Download & Stream Buttons (Matching Reference Image) */}
+                  <div className="flex flex-col items-center justify-center gap-2.5 mt-5 pt-4 border-t border-neutral-900">
+                    {audioMp3Url ? (
+                      <a
+                        href={audioMp3Url}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-[#48bb78] hover:bg-[#3ba565] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer min-w-[220px]"
+                        title="Download MP3"
+                      >
+                        <span>DOWNLOAD HERE</span>
+                        <ChevronDown className="w-4 h-4 stroke-[3]" />
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled
+                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-neutral-800 text-neutral-400 font-bold text-xs uppercase tracking-wider min-w-[220px] cursor-not-allowed"
+                      >
+                        <span>DOWNLOAD COMING SOON</span>
+                      </button>
+                    )}
+
+                    {audioStreamUrl ? (
+                      <a
+                        href={audioStreamUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-[#48bb78] hover:bg-[#3ba565] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer min-w-[220px]"
+                        title="Stream Online"
+                      >
+                        <span>STREAM HERE</span>
+                        <ChevronDown className="w-4 h-4 stroke-[3]" />
+                      </a>
+                    ) : audioMp3Url ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const audio = document.getElementById('article-audio-element') as HTMLAudioElement;
+                          if (audio) {
+                            if (audio.paused) {
+                              audio.play();
+                            } else {
+                              audio.pause();
+                            }
+                          }
+                        }}
+                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-[#48bb78] hover:bg-[#3ba565] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer min-w-[220px]"
+                        title="Stream Track"
+                      >
+                        <span>STREAM HERE</span>
+                        <ChevronDown className="w-4 h-4 stroke-[3]" />
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              )}
             </div>
           );
         })()}

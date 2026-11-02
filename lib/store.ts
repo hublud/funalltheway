@@ -129,7 +129,55 @@ class DataStore {
         this.articles = dbArticles.map((row: any) => {
           const rawTags: string[] = row.tags || [];
           const mediaTagEntries = rawTags.filter((t: string) => t.startsWith("MEDIA:"));
-          const userTags = rawTags.filter((t: string) => !t.startsWith("MEDIA:"));
+          const streamTagEntries = rawTags.filter((t: string) => t.startsWith("STREAM:"));
+          const userTags = rawTags.filter((t: string) => !t.startsWith("MEDIA:") && !t.startsWith("STREAM:"));
+
+          // Resolve video URL (e.g. YouTube or MP4)
+          let videoUrl: string | undefined = undefined;
+          const ytTag = mediaTagEntries.find((t: string) => t.includes('youtube.com') || t.includes('youtu.be'));
+          if (ytTag) {
+            videoUrl = ytTag.replace("MEDIA:", "").trim();
+          }
+          if (!videoUrl && Array.isArray(row.content)) {
+            for (const p of row.content) {
+              const ym = p.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+              if (ym) {
+                videoUrl = `https://www.youtube.com/watch?v=${ym[1]}`;
+                break;
+              }
+            }
+          }
+
+          // Resolve direct audio MP3 URL
+          let audioUrl: string | undefined = undefined;
+          const mp3Tag = mediaTagEntries.find((t: string) => t.toLowerCase().includes('.mp3'));
+          if (mp3Tag) {
+            audioUrl = mp3Tag.replace("MEDIA:", "").trim();
+          }
+          if (!audioUrl && Array.isArray(row.content)) {
+            for (const p of row.content) {
+              const m = p.match(/https?:\/\/[^\s"'<>]+\.mp3(?:\?[^\s"'<>]*)?/i);
+              if (m) {
+                audioUrl = m[0];
+                break;
+              }
+            }
+          }
+
+          // Resolve stream URL (e.g. Audiomack)
+          let streamUrl: string | undefined = undefined;
+          if (streamTagEntries.length > 0) {
+            streamUrl = streamTagEntries[0].replace("STREAM:", "").trim();
+          }
+          if (!streamUrl && Array.isArray(row.content)) {
+            for (const p of row.content) {
+              const s = p.match(/https?:\/\/(?:www\.)?audiomack\.com\/[^\s"'<>]+/i);
+              if (s) {
+                streamUrl = s[0];
+                break;
+              }
+            }
+          }
 
           const isMainVideo =
             row.image?.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
@@ -144,8 +192,10 @@ class DataStore {
           }
 
           mediaTagEntries.forEach((t: string) => {
-            const mediaUrl = t.replace("MEDIA:", "");
-            if (mediaUrl && !mediaList.some((m) => m.url === mediaUrl)) {
+            const mediaUrl = t.replace("MEDIA:", "").trim();
+            const isAudio = mediaUrl.match(/\.(mp3|wav|ogg|m4a|aac)(\?.*)?$/i);
+            // Strictly exclude audio files from visual mediaList
+            if (mediaUrl && !isAudio && !mediaList.some((m) => m.url === mediaUrl)) {
               const isVid =
                 mediaUrl.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
                 mediaUrl.includes("/videos/");
@@ -163,6 +213,9 @@ class DataStore {
             excerpt: row.excerpt,
             content: row.content || [],
             image: row.image,
+            videoUrl,
+            audioUrl,
+            streamUrl,
             category: row.category_name || row.category || "News",
             categorySlug: row.category_slug || "news",
             location: row.location || "Lagos",
