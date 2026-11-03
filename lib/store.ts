@@ -132,22 +132,6 @@ class DataStore {
           const streamTagEntries = rawTags.filter((t: string) => t.startsWith("STREAM:"));
           const userTags = rawTags.filter((t: string) => !t.startsWith("MEDIA:") && !t.startsWith("STREAM:"));
 
-          // Resolve video URL (e.g. YouTube or MP4)
-          let videoUrl: string | undefined = undefined;
-          const ytTag = mediaTagEntries.find((t: string) => t.includes('youtube.com') || t.includes('youtu.be'));
-          if (ytTag) {
-            videoUrl = ytTag.replace("MEDIA:", "").trim();
-          }
-          if (!videoUrl && Array.isArray(row.content)) {
-            for (const p of row.content) {
-              const ym = p.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
-              if (ym) {
-                videoUrl = `https://www.youtube.com/watch?v=${ym[1]}`;
-                break;
-              }
-            }
-          }
-
           // Resolve direct audio MP3 URL
           let audioUrl: string | undefined = undefined;
           const mp3Tag = mediaTagEntries.find((t: string) => t.toLowerCase().includes('.mp3'));
@@ -192,10 +176,8 @@ class DataStore {
           }
 
           mediaTagEntries.forEach((t: string) => {
-            const mediaUrl = t.replace("MEDIA:", "").trim();
-            const isAudio = mediaUrl.match(/\.(mp3|wav|ogg|m4a|aac)(\?.*)?$/i);
-            // Strictly exclude audio files from visual mediaList
-            if (mediaUrl && !isAudio && !mediaList.some((m) => m.url === mediaUrl)) {
+            const mediaUrl = t.replace("MEDIA:", "");
+            if (mediaUrl && !mediaList.some((m) => m.url === mediaUrl)) {
               const isVid =
                 mediaUrl.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
                 mediaUrl.includes("/videos/");
@@ -213,7 +195,6 @@ class DataStore {
             excerpt: row.excerpt,
             content: row.content || [],
             image: row.image,
-            videoUrl,
             audioUrl,
             streamUrl,
             category: row.category_name || row.category || "News",

@@ -226,6 +226,12 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
               return true;
             });
 
+          // Branded native download URL on FunAllTheWay (prevents cross-origin blocking & hides external URLs)
+          const brandedDownloadUrl = audioMp3Url
+            ? `/api/download?url=${encodeURIComponent(audioMp3Url)}&title=${encodeURIComponent(trackTitle || article.title)}`
+            : null;
+          const downloadFilename = `${(trackTitle || article.title).replace(/[^a-zA-Z0-9_-]/g, "-")}-FunAllTheWay.mp3`;
+
           const hasAudioPlayer = isAudioCategory || Boolean(audioMp3Url) || Boolean(audioStreamUrl);
 
           return (
@@ -354,14 +360,12 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
 
                   {/* Vertically Stacked Green Download & Stream Buttons (Matching Reference Image) */}
                   <div className="flex flex-col items-center justify-center gap-2.5 mt-5 pt-4 border-t border-neutral-900">
-                    {audioMp3Url ? (
+                    {brandedDownloadUrl ? (
                       <a
-                        href={audioMp3Url}
-                        download
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={brandedDownloadUrl}
+                        download={downloadFilename}
                         className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-[#48bb78] hover:bg-[#3ba565] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer min-w-[220px]"
-                        title="Download MP3"
+                        title="Download MP3 directly to your device"
                       >
                         <span>DOWNLOAD HERE</span>
                         <ChevronDown className="w-4 h-4 stroke-[3]" />
@@ -376,18 +380,7 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                       </button>
                     )}
 
-                    {audioStreamUrl ? (
-                      <a
-                        href={audioStreamUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-[#48bb78] hover:bg-[#3ba565] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer min-w-[220px]"
-                        title="Stream Online"
-                      >
-                        <span>STREAM HERE</span>
-                        <ChevronDown className="w-4 h-4 stroke-[3]" />
-                      </a>
-                    ) : audioMp3Url ? (
+                    {audioMp3Url ? (
                       <button
                         type="button"
                         onClick={() => {
@@ -401,11 +394,22 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                           }
                         }}
                         className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-[#48bb78] hover:bg-[#3ba565] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer min-w-[220px]"
-                        title="Stream Track"
+                        title="Stream & Listen Online"
                       >
                         <span>STREAM HERE</span>
                         <ChevronDown className="w-4 h-4 stroke-[3]" />
                       </button>
+                    ) : audioStreamUrl ? (
+                      <a
+                        href={audioStreamUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded bg-[#48bb78] hover:bg-[#3ba565] text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer min-w-[220px]"
+                        title="Stream Online"
+                      >
+                        <span>STREAM HERE</span>
+                        <ChevronDown className="w-4 h-4 stroke-[3]" />
+                      </a>
                     ) : null}
                   </div>
                 </div>
