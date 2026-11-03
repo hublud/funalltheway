@@ -119,36 +119,25 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
           </div>
         </div>
 
-        {/* Feature Media: Video or Full Uncropped Proportional Image */}
-        <div className="mb-6 flex items-center justify-center">
-          <div className="max-w-xl sm:max-w-2xl w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 flex items-center justify-center shadow-sm">
-            {article.image.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) || article.image.includes("/videos/") ? (
-              <video
-                src={article.image}
-                controls
-                playsInline
-                className="w-full max-h-[460px] object-contain rounded-2xl"
-              />
-            ) : (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={article.image}
-                alt={article.title}
-                className="w-full max-h-[480px] sm:max-h-[520px] object-contain rounded-2xl block mx-auto"
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Top In-Article Ad */}
-        <InArticleAd />
-
-        {/* Formatted Content Paragraphs & Dedicated Media Players */}
+        {/* Formatted Content, Feature Media & Dedicated Players */}
         {(() => {
+          const isMusicVideo =
+            article.categorySlug === 'music-videos' ||
+            article.categorySlug === 'comedy' ||
+            (article.category && (
+              article.category.toLowerCase().includes('video') ||
+              article.category.toLowerCase().includes('comedy')
+            ));
+
           const isAudioCategory =
-            article.categorySlug === 'mixtapes' ||
-            article.categorySlug === 'music' ||
-            (article.category && (article.category.toLowerCase().includes('mixtape') || article.category.toLowerCase().includes('music')));
+            !isMusicVideo && (
+              article.categorySlug === 'mixtapes' ||
+              article.categorySlug === 'music' ||
+              (article.category && (
+                article.category.toLowerCase().includes('mixtape') ||
+                article.category.toLowerCase().includes('music')
+              ))
+            );
 
           // Resolve Audio, Stream, and Video URLs
           let audioMp3Url: string | null = article.audioUrl || null;
@@ -195,11 +184,11 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             }
           });
 
-          // YouTube or MP4 Video Extraction
-          const ytVideoId = !isAudioCategory && videoEmbedUrl
+          // YouTube or MP4 Video Extraction (Active for any post with video, especially Music Videos)
+          const ytVideoId = videoEmbedUrl
             ? (videoEmbedUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i)?.[1] || null)
             : null;
-          const directVideoUrl = !isAudioCategory && videoEmbedUrl && !ytVideoId
+          const directVideoUrl = videoEmbedUrl && !ytVideoId
             ? (videoEmbedUrl.match(/https?:\/\/[^\s"'<>]+\.(mp4|webm|mov|mkv)(?:\?[^\s"'<>]*)?/i)?.[0] || null)
             : null;
           const hasVideoEmbed = Boolean(ytVideoId || directVideoUrl);
@@ -250,31 +239,12 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
           const hasAudioPlayer = Boolean(audioMp3Url) || Boolean(audioStreamUrl);
 
           return (
-            <div className="space-y-6">
-              {/* Quick Jump Bar for Audio Posts */}
-              {hasAudioPlayer && (
-                <div className="flex items-center justify-between p-3.5 bg-slate-900 text-white rounded-xl mb-4 shadow-sm border border-slate-800">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <Headphones className="w-4 h-4 text-emerald-400 flex-shrink-0 animate-pulse" />
-                    <span className="text-xs font-bold truncate">
-                      {audioMp3Url ? 'Official MP3 Audio Track Ready' : 'Audio Track Available'}
-                    </span>
-                  </div>
-                  <a
-                    href="#audio-player-card"
-                    className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider bg-[#48bb78] hover:bg-[#3ba565] text-white px-3 py-1.5 rounded transition-all active:scale-95 flex-shrink-0"
-                  >
-                    <span>Download MP3</span>
-                    <ChevronDown className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              )}
-
-              {/* Embedded Video Player for Music Videos, Comedy & Video Posts */}
-              {hasVideoEmbed && (
-                <div className="my-6">
-                  <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border border-slate-800 bg-black">
-                    {ytVideoId ? (
+            <>
+              {/* Feature Media: Embedded 16:9 HD Video Player or Full Image */}
+              <div className="mb-6 flex items-center justify-center">
+                <div className="w-full max-w-3xl rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 flex items-center justify-center shadow-lg">
+                  {ytVideoId ? (
+                    <div className="w-full aspect-video">
                       <iframe
                         src={`https://www.youtube-nocookie.com/embed/${ytVideoId}?autoplay=0&rel=0`}
                         title={`${article.title} - Video Player`}
@@ -282,20 +252,66 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
                       />
-                    ) : (
-                      <video
-                        src={directVideoUrl!}
-                        controls
-                        playsInline
-                        className="w-full h-full object-contain"
-                      />
-                    )}
-                  </div>
+                    </div>
+                  ) : directVideoUrl || article.image?.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) || article.image?.includes("/videos/") ? (
+                    <video
+                      src={directVideoUrl || article.image}
+                      controls
+                      playsInline
+                      className="w-full max-h-[480px] object-contain rounded-2xl"
+                    />
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full max-h-[480px] sm:max-h-[520px] object-contain rounded-2xl block mx-auto"
+                    />
+                  )}
                 </div>
-              )}
+              </div>
 
-              {/* Text Paragraphs & Embedded Video Content */}
-              <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
+              {/* Top In-Article Ad */}
+              <InArticleAd />
+
+              <div className="space-y-6">
+                {/* Quick Video Streaming Status Banner */}
+                {hasVideoEmbed && (
+                  <div className="flex items-center justify-between p-3.5 bg-slate-900 text-white rounded-xl mb-4 shadow-sm border border-slate-800">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <Film className="w-4 h-4 text-red-500 flex-shrink-0 animate-pulse" />
+                      <span className="text-xs font-bold truncate">
+                        Official Video Stream • HD Player Ready
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider bg-red-600 text-white px-3 py-1.5 rounded flex-shrink-0">
+                      <Play className="w-3 h-3 fill-current" />
+                      <span>Stream in HD</span>
+                    </span>
+                  </div>
+                )}
+
+                {/* Quick Jump Bar for Audio Posts */}
+                {hasAudioPlayer && (
+                  <div className="flex items-center justify-between p-3.5 bg-slate-900 text-white rounded-xl mb-4 shadow-sm border border-slate-800">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <Headphones className="w-4 h-4 text-emerald-400 flex-shrink-0 animate-pulse" />
+                      <span className="text-xs font-bold truncate">
+                        {audioMp3Url ? 'Official MP3 Audio Track Ready' : 'Audio Track Available'}
+                      </span>
+                    </div>
+                    <a
+                      href="#audio-player-card"
+                      className="inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-wider bg-[#48bb78] hover:bg-[#3ba565] text-white px-3 py-1.5 rounded transition-all active:scale-95 flex-shrink-0"
+                    >
+                      <span>Download MP3</span>
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
+
+                {/* Text Paragraphs & Embedded Video Content */}
+                <div className="prose prose-slate max-w-none text-slate-800 text-base leading-relaxed space-y-5">
                 {validParagraphs.map((para, idx) => {
                   const ytMatch = !isAudioCategory && para.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
                   const isDirectVideo = !isAudioCategory && para.match(/https?:\/\/[^\s]+\.(mp4|webm|mov|mkv)/i);
@@ -454,6 +470,7 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                 </div>
               )}
             </div>
+            </>
           );
         })()}
 
