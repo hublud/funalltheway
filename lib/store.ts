@@ -130,7 +130,14 @@ class DataStore {
           const rawTags: string[] = row.tags || [];
           const mediaTagEntries = rawTags.filter((t: string) => t.startsWith("MEDIA:"));
           const streamTagEntries = rawTags.filter((t: string) => t.startsWith("STREAM:"));
-          const userTags = rawTags.filter((t: string) => !t.startsWith("MEDIA:") && !t.startsWith("STREAM:"));
+          const userTags = rawTags.filter(
+            (t: string) =>
+              !t.startsWith("MEDIA:") &&
+              !t.startsWith("STREAM:") &&
+              !t.startsWith("SRC:") &&
+              !t.includes("http://") &&
+              !t.includes("https://")
+          );
 
           // Resolve direct audio MP3 URL
           let audioUrl: string | undefined = undefined;

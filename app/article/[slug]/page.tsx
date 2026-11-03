@@ -509,22 +509,34 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
         })()}
 
         {/* Article Tags */}
-        {article.tags && article.tags.length > 0 && (
-          <div className="flex items-center flex-wrap gap-2 mt-8 pt-4 border-t border-slate-100">
-            <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
-              <Tag className="w-3.5 h-3.5" /> TAGS:
-            </span>
-            {article.tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/search?q=${encodeURIComponent(tag)}`}
-                className="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-600 px-2.5 py-1 rounded text-slate-700 font-medium transition-colors"
-              >
-                #{tag}
-              </Link>
-            ))}
-          </div>
-        )}
+        {(() => {
+          const displayTags = (article.tags || []).filter(
+            (t) =>
+              t &&
+              !t.startsWith("MEDIA:") &&
+              !t.startsWith("STREAM:") &&
+              !t.startsWith("SRC:") &&
+              !t.includes("http://") &&
+              !t.includes("https://")
+          );
+          if (displayTags.length === 0) return null;
+          return (
+            <div className="flex items-center flex-wrap gap-2 mt-8 pt-4 border-t border-slate-100">
+              <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
+                <Tag className="w-3.5 h-3.5" /> TAGS:
+              </span>
+              {displayTags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/search?q=${encodeURIComponent(tag)}`}
+                  className="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-600 px-2.5 py-1 rounded text-slate-700 font-medium transition-colors"
+                >
+                  #{tag}
+                </Link>
+              ))}
+            </div>
+          );
+        })()}
 
         {/* Social Sharing */}
         <SocialShare title={article.title} />
