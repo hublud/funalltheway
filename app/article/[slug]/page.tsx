@@ -171,7 +171,7 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
           }
           if (!videoEmbedUrl) {
             (article.tags || []).forEach((t) => {
-              if (t.startsWith('MEDIA:') && (t.includes('youtube.com') || t.includes('youtu.be'))) {
+              if (t.startsWith('MEDIA:') && (t.includes('youtube.com') || t.includes('youtu.be') || t.match(/\.(mp4|webm|mov|mkv)/i))) {
                 videoEmbedUrl = t.replace('MEDIA:', '').trim();
               }
             });
@@ -190,8 +190,19 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             if (!videoEmbedUrl) {
               const y = p.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
               if (y) videoEmbedUrl = `https://www.youtube.com/watch?v=${y[1]}`;
+              const v = p.match(/https?:\/\/[^\s"'<>]+\.(mp4|webm|mov|mkv)(?:\?[^\s"'<>]*)?/i);
+              if (v) videoEmbedUrl = v[0];
             }
           });
+
+          // YouTube or MP4 Video Extraction
+          const ytVideoId = !isAudioCategory && videoEmbedUrl
+            ? (videoEmbedUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i)?.[1] || null)
+            : null;
+          const directVideoUrl = !isAudioCategory && videoEmbedUrl && !ytVideoId
+            ? (videoEmbedUrl.match(/https?:\/\/[^\s"'<>]+\.(mp4|webm|mov|mkv)(?:\?[^\s"'<>]*)?/i)?.[0] || null)
+            : null;
+          const hasVideoEmbed = Boolean(ytVideoId || directVideoUrl);
 
           // Track Title & Artist breakdown
           const rawTitle = article.title || '';
@@ -218,6 +229,10 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             })
             .filter((p) => {
               if (!p || p.length < 5 || p.includes("Enter the first paragraph")) return false;
+              // If paragraph is just an iframe or video URL line, discard it since dedicated video player will render it
+              if (p.includes("youtube.com") || p.includes("youtu.be") || p.match(/^https?:\/\/[^\s]+\.(mp4|webm|mov|mkv)$/i)) {
+                return false;
+              }
               // If audio category, discard advertiser YouTube video links and raw MP3/Stream lines
               if (isAudioCategory) {
                 if (p.includes("Watch Official Video on YouTube") || p.includes("youtube.com/") || p.includes("youtu.be/")) return false;
@@ -252,6 +267,30 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                     <span>Download MP3</span>
                     <ChevronDown className="w-3.5 h-3.5" />
                   </a>
+                </div>
+              )}
+
+              {/* Embedded Video Player for Music Videos, Comedy & Video Posts */}
+              {hasVideoEmbed && (
+                <div className="my-6">
+                  <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border border-slate-800 bg-black">
+                    {ytVideoId ? (
+                      <iframe
+                        src={`https://www.youtube-nocookie.com/embed/${ytVideoId}?autoplay=0&rel=0`}
+                        title={`${article.title} - Video Player`}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        src={directVideoUrl!}
+                        controls
+                        playsInline
+                        className="w-full h-full object-contain"
+                      />
+                    )}
+                  </div>
                 </div>
               )}
 

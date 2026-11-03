@@ -163,6 +163,36 @@ class DataStore {
             }
           }
 
+          // Resolve video URL (YouTube, Vimeo, MP4)
+          let videoUrl: string | undefined = undefined;
+          const vidTag = mediaTagEntries.find((t: string) => {
+            const u = t.replace("MEDIA:", "").trim();
+            return (
+              u.includes("youtube.com") ||
+              u.includes("youtu.be") ||
+              u.includes("vimeo.com") ||
+              u.match(/\.(mp4|webm|mov|mkv|avi|3gp)(?:\?[^\s"'<>]*)?$/i) ||
+              u.includes("/videos/")
+            );
+          });
+          if (vidTag) {
+            videoUrl = vidTag.replace("MEDIA:", "").trim();
+          }
+          if (!videoUrl && Array.isArray(row.content)) {
+            for (const p of row.content) {
+              const y = p.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i);
+              if (y) {
+                videoUrl = `https://www.youtube.com/watch?v=${y[1]}`;
+                break;
+              }
+              const v = p.match(/https?:\/\/[^\s"'<>]+\.(mp4|webm|mov|mkv)(?:\?[^\s"'<>]*)?/i);
+              if (v) {
+                videoUrl = v[0];
+                break;
+              }
+            }
+          }
+
           const isMainVideo =
             row.image?.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
             row.image?.includes("/videos/");
@@ -195,6 +225,7 @@ class DataStore {
             excerpt: row.excerpt,
             content: row.content || [],
             image: row.image,
+            videoUrl,
             audioUrl,
             streamUrl,
             category: row.category_name || row.category || "News",
