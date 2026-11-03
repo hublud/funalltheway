@@ -247,7 +247,7 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
             : null;
           const downloadFilename = `${(trackTitle || article.title).replace(/[^a-zA-Z0-9_-]/g, "-")}-FunAllTheWay.mp3`;
 
-          const hasAudioPlayer = isAudioCategory || Boolean(audioMp3Url) || Boolean(audioStreamUrl);
+          const hasAudioPlayer = Boolean(audioMp3Url) || Boolean(audioStreamUrl);
 
           return (
             <div className="space-y-6">
