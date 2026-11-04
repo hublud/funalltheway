@@ -213,15 +213,30 @@ class DataStore {
           }
 
           mediaTagEntries.forEach((t: string) => {
-            const mediaUrl = t.replace("MEDIA:", "");
-            if (mediaUrl && !mediaList.some((m) => m.url === mediaUrl)) {
+            const mediaUrl = t.replace("MEDIA:", "").trim();
+            if (
+              mediaUrl &&
+              mediaUrl !== row.image &&
+              !mediaList.some((m) => m.url === mediaUrl) &&
+              !mediaUrl.includes("youtube.com") &&
+              !mediaUrl.includes("youtu.be") &&
+              !mediaUrl.toLowerCase().includes(".mp3") &&
+              !mediaUrl.toLowerCase().includes(".wav") &&
+              !mediaUrl.includes("audiomack.com")
+            ) {
               const isVid =
                 mediaUrl.match(/\.(mp4|webm|mov|mkv|avi)$/i) ||
                 mediaUrl.includes("/videos/");
-              mediaList.push({
-                url: mediaUrl,
-                type: isVid ? "video" : "image",
-              });
+              const isImg =
+                mediaUrl.match(/\.(jpg|jpeg|png|webp|gif|avif)(?:\?[^\s"'<>]*)?$/i) ||
+                mediaUrl.includes("images.unsplash.com") ||
+                mediaUrl.startsWith("/");
+              if (isVid || isImg) {
+                mediaList.push({
+                  url: mediaUrl,
+                  type: isVid ? "video" : "image",
+                });
+              }
             }
           });
 

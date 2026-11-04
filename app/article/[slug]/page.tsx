@@ -476,9 +476,32 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
 
         {/* Additional Attached Media Gallery (Photos / Videos if multiple uploaded) */}
         {(() => {
-          const additionalMedia = (article.mediaList || []).filter(
-            (m) => m.url !== article.image
-          );
+          const additionalMedia = (article.mediaList || []).filter((m) => {
+            if (!m || !m.url || m.url === article.image) return false;
+            // Never treat YouTube video URLs, MP3 audio, or streaming links as photo attachments
+            if (
+              m.url === article.videoUrl ||
+              m.url === article.audioUrl ||
+              m.url.includes("youtube.com") ||
+              m.url.includes("youtu.be") ||
+              m.url.toLowerCase().includes(".mp3") ||
+              m.url.toLowerCase().includes(".wav") ||
+              m.url.includes("audiomack.com")
+            ) {
+              return false;
+            }
+            const isMediaVid =
+              m.type === "video" ||
+              m.url.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) ||
+              m.url.includes("/videos/");
+            const isMediaImg =
+              m.type === "image" &&
+              (m.url.match(/\.(jpg|jpeg|png|webp|gif|avif)(?:\?[^\s"'<>]*)?$/i) ||
+                m.url.includes("images.unsplash.com") ||
+                m.url.startsWith("/"));
+            return isMediaVid || isMediaImg;
+          });
+
           if (additionalMedia.length === 0) return null;
 
           return (
@@ -515,6 +538,11 @@ export default function ArticleDetailsPage({ params }: ArticlePageProps) {
                           src={media.url}
                           alt={`${article.title} - Media ${idx + 1}`}
                           className="w-full max-h-[380px] object-contain"
+                          onError={(e) => {
+                            // Automatically hide broken image container
+                            const parent = (e.currentTarget as HTMLElement).closest('.rounded-xl');
+                            if (parent) (parent as HTMLElement).style.display = 'none';
+                          }}
                         />
                       )}
                     </div>

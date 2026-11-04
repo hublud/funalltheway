@@ -17,6 +17,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const isVideo =
     article.image?.match(/\.(mp4|webm|mov|mkv|avi|3gp)$/i) ||
     article.image?.includes("/videos/") ||
+    Boolean(article.videoUrl) ||
+    article.categorySlug === "music-videos" ||
+    article.categorySlug === "comedy" ||
     article.mediaList?.some((m) => m.type === "video");
 
   const hasMultipleMedia = article.mediaList && article.mediaList.length > 1;
