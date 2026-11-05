@@ -49,15 +49,34 @@ export const CategoryPageTemplate: React.FC<CategoryPageTemplateProps> = ({
       .replace(/[^a-z0-9]+/g, " ")
       .trim();
 
+    // Specific strict separation for Music vs Music Video
+    const isTargetMusicVideo =
+      targetSlug === "music-videos" ||
+      targetSlug === "music-video" ||
+      targetName === "music video" ||
+      targetName === "music videos";
+
+    const isArtMusicVideo =
+      artSlug === "music-videos" ||
+      artSlug === "music-video" ||
+      artCat === "music video" ||
+      artCat === "music videos";
+
+    if (isTargetMusicVideo) {
+      return isArtMusicVideo;
+    }
+
+    const isTargetMusic = targetSlug === "music" || targetName === "music";
+    if (isTargetMusic) {
+      return !isArtMusicVideo && (artSlug === "music" || artCat === "music");
+    }
+
+    // Exact match or singular/plural normalization for other categories
     return (
       artSlug === targetSlug ||
       artCat === targetName ||
       artSlug.replace(/s$/, "") === targetSlug.replace(/s$/, "") ||
-      artCat.replace(/s$/, "") === targetName.replace(/s$/, "") ||
-      (targetSlug.length > 3 && artSlug.includes(targetSlug)) ||
-      (artSlug.length > 3 && targetSlug.includes(artSlug)) ||
-      (targetName.length > 3 && artCat.includes(targetName)) ||
-      (artCat.length > 3 && targetName.includes(artCat))
+      artCat.replace(/s$/, "") === targetName.replace(/s$/, "")
     );
   });
 
